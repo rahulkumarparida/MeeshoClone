@@ -1,14 +1,16 @@
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status , generics , permissions
 from django.db import transaction
-from django.db.models import F
+from django.db.models import F , Prefetch
+
 
 from carts.models import Cart
 from products.models import Inventory
 from .models import Order , OrderItem
-
+from .permissions import IsOwnerOrAdmin
+from .serializers import OrderSerializer , OrderItemSerializer
 # Create your views here.
 class PlaceOrderView(APIView):
     permission_classes = [IsAuthenticated]
@@ -62,3 +64,30 @@ class PlaceOrderView(APIView):
         except ValueError as e:
             return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"order_id":order.id , "total":order.total_amount}, status= status.HTTP_201_CREATED)
+
+
+
+class OrderDetailsView(generics.RetrieveAPIView):
+    serializer_class = OrderSerializer
+    permission_classes= [permissions.IsAuthenticated , IsOwnerOrAdmin]
+    queryset = Order.objects.all().select_related('user').prefetch_related(
+        Prefetch('items' , queryset=OrderItem.objects.select_related('product'))
+    )
+    
+class OrderHistoryListView(generics.ListAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class=None
+    
+    def get_queryset(self):
+        qs=Order.objects.all().select_related('user').prefetch_related(
+            Prefetch('items' , queryset=OrderItem.objects.select_related('product'))
+        ).order_by('-created_at')
+        
+        if not self.request.user.is_staff:
+            qs = qs.filter(user=self.request.user)
+        else:
+            user_id = self.request.query_params.get('user')
+            if user_id:
+                qs.filter(user_id=user_id)
+        return qs   

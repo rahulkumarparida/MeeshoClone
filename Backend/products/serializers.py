@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import Product , ProductImage , Category , Inventory 
+from django.db import models
+
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
@@ -35,12 +37,26 @@ class ProductReadSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
     inventory = serializers.IntegerField(source="inventory.quantity" , read_only=True)
     available = serializers.IntegerField(source="inventory.reserved" , read_only=True)
+    average_rating = serializers.SerializerMethodField()
+    review_count = serializers.SerializerMethodField()
     
     class Meta:
         model=Product
-        fields=['id','title','slug','description','price','category','images','inventory','available','seller','is_active','created_at']
-        read_only_fields = ['seller','inventory','available','created_at']
+        fields=['id','title','slug','description','price','category','images','inventory','available','seller','average_rating','review_count','is_active','created_at']
+        read_only_fields = ['seller','inventory','available','average_rating','review_count','created_at']
         
+    
+    def get_average_rating(self,obj):
+        return obj.reviews.aggregate(avg=models.Avg('rating'))['avg']
+    
+    
+    def get_review_count(self,obj):
+        return obj.reviews.count()
+    
+    
+    
+    
+    
 
 class ProductWriteSerializer(serializers.ModelSerializer):
     images = serializers.ListField(child=serializers.ImageField() , write_only=True , required=False)
