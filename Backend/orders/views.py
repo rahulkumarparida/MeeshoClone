@@ -4,13 +4,15 @@ from rest_framework.response import Response
 from rest_framework import status , generics , permissions
 from django.db import transaction
 from django.db.models import F , Prefetch
-
+from celery.result import AsyncResult
+from config.celery import app
 
 from carts.models import Cart
 from products.models import Inventory
 from .models import Order , OrderItem
 from .permissions import IsOwnerOrAdmin
 from .serializers import OrderSerializer , OrderItemSerializer
+from .tasks import send_order_confirmation_email
 # Create your views here.
 class PlaceOrderView(APIView):
     permission_classes = [IsAuthenticated]
@@ -57,6 +59,11 @@ class PlaceOrderView(APIView):
                     total += float(item.quantity) * float(item.unit_price)
                 
                 order.total_amount = total
+                # Send Confm. here
+                email_response=send_order_confirmation_email.delay(email='rroxx460@gmail.com',orderid=order.id)
+                print("email response here: :",email_response)
+                # response = AsyncResult(email_response,app=app)
+                # print(response)
                 order.save()
                 
                 cart.items.all().delete()

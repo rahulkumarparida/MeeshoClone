@@ -37,7 +37,7 @@ class AddToCartSerializer(serializers.Serializer):
         product = attrs["product_id"]
         qty=attrs["quantity"]
         inv = getattr(product , "inventory" , None)
-        if inv and inv.avaliable() < qty:
-            raise serializers.ValidationError(f"Only {inv.avaliable()} items avaliable for {product.title}")
+        if inv and inv.available() < qty:
+            raise serializers.ValidationError(f"Only {inv.available()} items avaliable for {product.title}")
         return super().validate(attrs)
     

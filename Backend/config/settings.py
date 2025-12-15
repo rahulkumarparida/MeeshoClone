@@ -25,6 +25,8 @@ CLOUDINARY_NAME = private.CLOUDINARY_NAME
 CLOUDINARY_API_KEY = private.CLOUDINARY_API_KEY
 CLOUDINARY_API_SECRET = private.CLOUDINARY_API_SECRET
 DJANGO_SECRET_KEY = private.DJANGO_SECRET_KEY
+REDIS_PORT = private.REDIS_PORT
+REDIS_SERVER = private.REDIS_SERVER
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -66,6 +68,8 @@ INSTALLED_APPS = [
     "django_filters",
     'cloudinary',
     'cloudinary_storage',
+    'django_celery_results',
+    'django_celery_beat',
 
 ]
 
@@ -162,7 +166,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
@@ -199,6 +203,20 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
+
+
+# Celery Configs
+CELERY_TIMEZONE="Asia/Kolkata"
+CELERY_BROKER_URL = f"redis://{REDIS_SERVER}:{REDIS_PORT}/0"
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_CACHE_BACKEND = 'default'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+
+CELERY_RESULT_EXTENDED = True
+
 
 
 # SECURE_SSL_REDIRECT = True

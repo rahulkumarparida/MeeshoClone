@@ -1,6 +1,7 @@
 
 
 venv
+.venv-linux
 __pycache__
 migrations
 private.py
