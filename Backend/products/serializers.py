@@ -88,3 +88,12 @@ class ProductWriteSerializer(serializers.ModelSerializer):
                 Product.objects.create(product=instance , images=img)
         return  instance
     
+    
+class InventorySerializer(serializers.ModelSerializer):
+    
+    
+    class Meta:
+        model = Inventory
+        fields = ["product" , "quantity" , "reserved"]
+        
+    

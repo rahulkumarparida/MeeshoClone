@@ -29,6 +29,14 @@ REDIS_PORT = private.REDIS_PORT
 REDIS_SERVER = private.REDIS_SERVER
 
 
+MAILTRAP_BACKEND = private.MAILTRAP_BACKEND
+MAILTRAP_HOST = private.MAILTRAP_HOST
+MAILTRAP_HOST_USER = private.MAILTRAP_HOST_USER
+MAILTRAP_HOST_PASSWORD = private.MAILTRAP_HOST_PASSWORD
+MAILTRAP_PORT = private.MAILTRAP_PORT
+MAILTRAP_USE_TLS = private.MAILTRAP_USE_TLS
+MAILTRAP_USE_SSL = private.MAILTRAP_USE_SSL
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -71,6 +79,8 @@ INSTALLED_APPS = [
     'django_celery_results',
     'django_celery_beat',
 
+    #  pip install flower
+
 ]
 
 MIDDLEWARE = [
@@ -88,7 +98,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -217,6 +227,15 @@ CELERY_RESULT_SERIALIZER = 'json'
 
 CELERY_RESULT_EXTENDED = True
 
+
+# Mailtrap configs (prod) -- sent to rroxx460 only
+EMAIL_BACKEND = MAILTRAP_BACKEND   
+EMAIL_HOST = MAILTRAP_HOST
+EMAIL_HOST_USER = MAILTRAP_HOST_USER
+EMAIL_HOST_PASSWORD = MAILTRAP_HOST_PASSWORD
+EMAIL_PORT = MAILTRAP_PORT
+EMAIL_USE_TLS = MAILTRAP_USE_TLS
+EMAIL_USE_SSL = MAILTRAP_USE_SSL
 
 
 # SECURE_SSL_REDIRECT = True

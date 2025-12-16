@@ -13,6 +13,7 @@ from .models import Order , OrderItem
 from .permissions import IsOwnerOrAdmin
 from .serializers import OrderSerializer , OrderItemSerializer
 from .tasks import send_order_confirmation_email
+
 # Create your views here.
 class PlaceOrderView(APIView):
     permission_classes = [IsAuthenticated]
@@ -60,8 +61,8 @@ class PlaceOrderView(APIView):
                 
                 order.total_amount = total
                 # Send Confm. here
-                email_response=send_order_confirmation_email.delay(email='rroxx460@gmail.com',orderid=order.id)
-                print("email response here: :",email_response)
+                email_response_id=send_order_confirmation_email.delay(email='rroxx460@gmail.com',orderid=order.id)
+                print("email response here: :",email_response_id)
                 # response = AsyncResult(email_response,app=app)
                 # print(response)
                 order.save()
@@ -70,7 +71,7 @@ class PlaceOrderView(APIView):
                 
         except ValueError as e:
             return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"order_id":order.id , "total":order.total_amount}, status= status.HTTP_201_CREATED)
+        return Response({"order_id":order.id , "total":order.total_amount , "email_response_id":email_response_id.id}, status= status.HTTP_201_CREATED)
 
 
 

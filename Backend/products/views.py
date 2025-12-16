@@ -5,8 +5,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Prefetch
 from rest_framework.exceptions import PermissionDenied
 
-from .models import Product , ProductImage
-from .serializers import ProductReadSerializer , ProductImageSerializer , ProductWriteSerializer
+from .models import Product , ProductImage , Inventory
+from .serializers import ProductReadSerializer , ProductImageSerializer , ProductWriteSerializer , InventorySerializer
 from .permissions import IsSellerOrReadOnly
 
 
@@ -41,3 +41,31 @@ class ProductViewset(viewsets.ModelViewSet):
         return qs
 
 
+class InventoryViewset(viewsets.ModelViewSet):
+    queryset = Inventory.objects.all()
+    serializer_class = InventorySerializer
+    permission_classes = [IsSellerOrReadOnly]
+    
+    def get_queryset(self):
+        if self.request.user.is_authenticated and self.request.user.role == "seller": 
+            param = self.kwargs.get("product")
+            print("param",param)
+            
+            qs = Inventory.objects.filter(product__id=param)
+            return qs
+        raise PermissionDenied("Only Seller can view this inventory")
+    
+    
+    def partial_update(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated and self.request.user.role == "seller":
+            param = self.kwargs.get("product")
+            inv = Inventory.objects.get(product__id=param)        
+            reqSerializer = InventorySerializer(inv , request.data  , partial=True)
+            
+            if reqSerializer.is_valid():
+            
+                reqSerializer.save()   
+                print(reqSerializer.data)   
+    
+                return  Response(reqSerializer.data)
+        raise PermissionDenied("Only Seller can view this inventory") 
