@@ -78,7 +78,7 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'django_celery_results',
     'django_celery_beat',
-
+    'django_weasyprint',
     #  pip install flower
 
 ]

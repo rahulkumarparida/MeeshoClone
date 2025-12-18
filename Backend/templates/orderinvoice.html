@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Invoice</title>
+    <style>
+      html {
+         background-color: #393939;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      body {
+         background-color: #393939;
+            border: 1px solid black;
+            color: #ffffff;
+            width: 100%;
+            height: 95vh;
+      }
+      .head {
+        padding: 25px;
+        display: flex;
+        justify-content: space-between;
+      }
+      .logo {
+        height: 80px;
+        width: 80px;
+      }
+      h2 {
+        font-size: 30px;
+      }
+      .date,
+      .userdata {
+        padding: 15px;
+        font-weight: 700;
+      }
+      .table {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 40px 0;
+      }
+      table,
+      th,
+      td {
+        border: 1px solid black;
+        border-collapse: collapse; /* Merges the borders into a single line */
+        padding: 8px; /* Adds space between content and border */
+        text-align: left; /* Aligns text to the left */
+      }
+      table {
+        width: 50%; /* Optional: Sets the table width */
+      }
+      .title{
+    color:aqua;
+    font-size: 50px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    
+}
+    </style>
+  </head>
+  <body>
+
+    <div class="head">
+      <div class="title">
+        MeeshoClone
+      </div>
+      <div>
+        <h2>Invoice</h2>
+      </div>
+    </div>
+    <hr />
+
+    <div class="date">
+      Date : {{ date }}
+      <br />
+      Time : {{ time }}
+    </div>
+
+    <hr />
+
+    <div class="userdata">
+      <div class="mail">Email : 
+        {% if email %}
+         {{ email }}  
+         {% endif %}
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="table">
+      <table>
+        <tr>
+          <th>Item</th>
+          <th>Quantity</th>
+          <th>Price</th>
+        </tr>
+        <!-- templating looping -->
+
+        {% for item in orders %}
+        <tr>
+          <td>{{ item.title }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>{{ item.price }}</td>
+        </tr>
+        {% endfor %}
+        <!-- templating -->
+        <tr>
+          <td></td>
+          <td>Total:</td>
+          <td>{{ total }}</td>
+        </tr>
+      </table>
+    </div>
+
+
+
+  </body>
+</html>
