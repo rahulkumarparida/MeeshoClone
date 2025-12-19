@@ -202,8 +202,21 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+        "core.throttles.BurstRateThrottle",
+        "core.throttles.SustainedRateThrottle"
+        
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '5/min',
+        'auth':'5/min',
+        'user': '200/hour',
+        "burst":"3/min",
+        "sustained":"510/day"
+    }
 }
-
 
 
 SIMPLE_JWT = {
@@ -225,6 +238,7 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 
+
 CELERY_RESULT_EXTENDED = True
 
 
@@ -237,6 +251,18 @@ EMAIL_PORT = MAILTRAP_PORT
 EMAIL_USE_TLS = MAILTRAP_USE_TLS
 EMAIL_USE_SSL = MAILTRAP_USE_SSL
 
+
+
+# Cache
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://{REDIS_SERVER}:{REDIS_PORT}/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
 
 # SECURE_SSL_REDIRECT = True
 # SESSION_COOKIE_SECURE = True
