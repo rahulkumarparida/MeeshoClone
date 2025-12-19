@@ -7,8 +7,8 @@ User = settings.AUTH_USER_MODEL
 
 class Order(models.Model):
     STATUS_CHOICES = [
-        ('placed','Placed'),
-        ('processing','Processing'),
+        ('placed','Placed'),    
+        ('processing','Processing'),    
         ('shipped','Shipped'),
         ('delivered','Delivered'),
         ('cancelled','Cancelled'),

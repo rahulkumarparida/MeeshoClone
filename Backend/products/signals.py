@@ -9,6 +9,7 @@ def create_inventory(sender , instance , created , **kwargs):
     if created:
         Inventory.objects.create(product=instance)
 
+
 @receiver(post_delete , sender=ProductImage)
 def remove_cloudinary_image(sender , instance , **kwargs):
     

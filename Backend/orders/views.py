@@ -45,8 +45,9 @@ class PlaceOrderView(APIView):
                 total = 0
                 for item in cart.items.select_related('product'):
                     inv = inv_map[item.product.id]
-                    
-                    updated = Inventory.objects.filter(pk=inv.pk , quantity__gte=item.quantity).update(quantity=F('quantity')-item.quantity)
+                    if order.status == "shipped":
+                            updated = Inventory.objects.filter(pk=inv.pk , quantity__gte=item.quantity).update(quantity=F('quantity')-item.quantity)
+                    updated = Inventory.objects.filter(pk=inv.pk , quantity__gte=item.quantity)   
                     
                     if updated == 0:
                         raise ValueError(f"Insufficient stock (concurrent) for {item.product.title}")
@@ -60,6 +61,7 @@ class PlaceOrderView(APIView):
                     total += float(item.quantity) * float(item.unit_price)
                 
                 order.total_amount = total
+                
                 # Send Confm. here
                 email_response_id=send_order_confirmation_email.delay(email='rroxx460@gmail.com',orderid=order.id)
                 print("email response here: :",email_response_id)
@@ -72,6 +74,67 @@ class PlaceOrderView(APIView):
         except ValueError as e:
             return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"order_id":order.id , "total":order.total_amount , "email_response_id":email_response_id.id}, status= status.HTTP_201_CREATED)
+    
+
+            
+
+# Updates orders
+from products.models import Inventory
+from products.serializers import InventorySerializer
+
+class PlaceOrderUpdateView(APIView):
+    # permission_classes = [IsOwnerOrAdmin]
+    
+    def patch(self , request , pk=None):
+        data = request.data
+        if not pk:
+            return Response({"details":"provide the order id in order to update the data"} ,status=status.HTTP_400_BAD_REQUEST)
+        
+        order = Order.objects.get(pk=pk)
+
+        if order.status in ['delivered' ,"cancelled"]:  
+            return Response({"details":f"Order is {order.status}"} , status=status.HTTP_204_NO_CONTENT)
+        
+        
+        stat = data.get('status')   
+
+        if stat == 'shipped':
+            orderitems = OrderItem.objects.filter(order=pk)
+            product_ids = list(orderitems.values_list('product_id',flat=True))
+            
+            try:
+                with transaction.atomic():
+                    inventories = Inventory.objects.select_for_update().filter(product__in = product_ids).select_related('product')
+                    
+                    inv_map = {inv.product_id: inv for inv in inventories}
+                    
+                    for item in orderitems.select_related('product'): 
+                        inv = inv_map[item.product.id]
+                        
+                        if not inv:
+                            return Response({'details':f"Inventory for this product not found {item.product.id}"},status=status.HTTP_404_NOT_FOUND)
+                        if inv.available() < item.quantity:
+                            return Response({"details":f"Insufficient Stock for {item.product.title}"}, status=status.HTTP_400_BAD_REQUEST)
+                        
+                        updated = Inventory.objects.filter(pk=inv.pk , quantity__gte=item.quantity).update(quantity=F('quantity')-item.quantity)
+                        
+                        if updated == 0:
+                            raise ValueError(f"Insufficient stock (concurrent) for {item.product.title}")
+                
+                return Response(OrderSerializer(order).data , status=status.HTTP_200_OK)
+            
+            except Exception as e:
+                return Response({'details':f"Exception: {str(e)}"} , status=status.HTTP_400_BAD_REQUEST)
+        
+        return Response(OrderSerializer(order).data , status=status.HTTP_200_OK)    
+        
+            
+             
+            
+    
+
+     
+    
 
 
 

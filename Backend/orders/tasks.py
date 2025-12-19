@@ -59,14 +59,14 @@ def send_order_confirmation_email(email , orderid):
     
     
     
-    mail = EmailMessage(subject=subject ,body=html_path_msg , from_email=from_email , to=to_email)
-    mail.content_subtype = 'html'
+    # mail = EmailMessage(subject=subject ,body=html_path_msg , from_email=from_email , to=to_email)
+    # mail.content_subtype = 'html'
     
-    pdf_byte = create_order_invoice(email=email , orderid=orderid)
+    # pdf_byte = create_order_invoice(email=email , orderid=orderid)
     
-    mail.attach(filename="invoice.pdf" , content=pdf_byte , mimetype="application/pdf")
+    # mail.attach(filename="invoice.pdf" , content=pdf_byte , mimetype="application/pdf")
     
-    mail.send()
+    # mail.send()
     print("mail sent to user")    
     
     return {'order':'Order sucessfully created!!'}
