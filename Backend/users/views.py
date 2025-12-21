@@ -13,12 +13,12 @@ from core.throttles import RegisteringRateThrottle
 class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
     permission_classes = [permissions.AllowAny]
-    throttle_classes = [RegisteringRateThrottle]
+    # throttle_classes = [RegisteringRateThrottle]
 
 class MeView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
-    throttle_classes = [RegisteringRateThrottle]
+    # throttle_classes = [RegisteringRateThrottle]
 
     def get_object(self):
         return self.request.user
@@ -26,7 +26,7 @@ class MeView(generics.RetrieveUpdateAPIView):
 class ProfileUpdateView(generics.UpdateAPIView):
     serializer_class = ProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
-    throttle_classes = [RegisteringRateThrottle]
+    # throttle_classes = [RegisteringRateThrottle]
 
     def get_object(self):
         return self.request.user.profile

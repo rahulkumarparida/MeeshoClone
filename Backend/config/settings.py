@@ -79,11 +79,14 @@ INSTALLED_APPS = [
     'django_celery_results',
     'django_celery_beat',
     'django_weasyprint',
+    "corsheaders",
     #  pip install flower
 
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware", 
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -92,6 +95,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
+
+
 
 ROOT_URLCONF = 'config.urls'
 
@@ -202,20 +212,20 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
-    'DEFAULT_THROTTLE_CLASSES': [
-        'rest_framework.throttling.AnonRateThrottle',
-        'rest_framework.throttling.UserRateThrottle',
-        "core.throttles.BurstRateThrottle",
-        "core.throttles.SustainedRateThrottle"
+    # 'DEFAULT_THROTTLE_CLASSES': [
+    #     'rest_framework.throttling.AnonRateThrottle',
+    #     'rest_framework.throttling.UserRateThrottle',
+    #     "core.throttles.BurstRateThrottle",
+    #     "core.throttles.SustainedRateThrottle"
         
-    ],
-    'DEFAULT_THROTTLE_RATES': {
-        'anon': '5/min',
-        'auth':'5/min',
-        'user': '200/hour',
-        "burst":"3/min",
-        "sustained":"510/day"
-    }
+    # ],
+    # 'DEFAULT_THROTTLE_RATES': {
+    #     'anon': '5/min',
+    #     'auth':'5/min',
+    #     'user': '200/hour',
+    #     "burst":"3/min",
+    #     "sustained":"510/day"
+    # }
 }
 
 
