@@ -23,7 +23,7 @@ class ProductViewset(viewsets.ModelViewSet):
         'is_active':['exact']
     }
     seacrh_fields = ['title' , 'description']
-    ordering_fields = ['price' , 'created_at']
+    ordering_fields = ['price' , '-created_at']
     
     
     
@@ -90,3 +90,38 @@ class InventoryViewset(viewsets.ModelViewSet):
     
                 return  Response(reqSerializer.data)
         raise PermissionDenied("Only Seller can view this inventory") 
+    
+    
+class ProductImageViewset(viewsets.ModelViewSet):
+    queryset = ProductImage.objects.all()
+    serializer_class = ProductImageSerializer
+    
+    
+    def create(self, request, *args, **kwargs):
+        user = request.user
+        data = request.data
+        files = request.FILES.getlist('image')
+        role = getattr(user , "role" , None)
+        if not role:
+            return Response({"details":"Unauthorized access not allowed."} , status=status.HTTP_401_UNAUTHORIZED)
+        
+        if role == "customer":
+            return Response({"details":"You are not allowed to do this."} , status=status.HTTP_403_FORBIDDEN)
+        
+        product_instance = Product.objects.get(id=int(data.get('product')))
+        
+        if not files:
+            return Response({"details":"No files found in the iamge"} , status=status.HTTP_400_BAD_REQUEST)
+        created = []
+        for f in files:
+            valid_data = {
+                "product":product_instance,
+                "image":f,
+                "alt_text": data.get('alt_text')
+            }
+            img = ProductImage.objects.create(**valid_data)
+            created.append(ProductImageSerializer(img).data)
+         
+        return Response({"uploaded":created} , status=status.HTTP_201_CREATED)
+    
+    
