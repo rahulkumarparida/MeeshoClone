@@ -5,7 +5,7 @@ import HomePage from './pages/HomePage'
 import Headers from './components/Headers'
 const App = () => {
   return (
-    <div className='h-[100vh] w-[100vw]'>
+    <div className=''>
       <div className='h-[12%]'>
         <Headers/>
       </div>

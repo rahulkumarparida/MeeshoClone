@@ -7,8 +7,8 @@ from rest_framework.exceptions import PermissionDenied
 from django.core.cache import cache 
 
 
-from .models import Product , ProductImage , Inventory
-from .serializers import ProductReadSerializer , ProductImageSerializer , ProductWriteSerializer , InventorySerializer
+from .models import Product , ProductImage , Inventory , Category
+from .serializers import ProductReadSerializer , ProductImageSerializer , ProductWriteSerializer , InventorySerializer , CategorySerializer
 from .permissions import IsSellerOrReadOnly
 
 
@@ -124,4 +124,10 @@ class ProductImageViewset(viewsets.ModelViewSet):
          
         return Response({"uploaded":created} , status=status.HTTP_201_CREATED)
     
+
+
+class CartegoryViewset(viewsets.ModelViewSet):
+    queryset = Category.objects.filter(parent=None)
+    serializer_class = CategorySerializer
+    pagination_class = None
     
