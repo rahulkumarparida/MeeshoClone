@@ -1,72 +1,44 @@
 import React from "react";
 
 const ScrollBrandsComponents = () => {
+  let brands = [
+    "https://images.meesho.com/images/marketing/1743159302944.webp",
 
+    "https://images.meesho.com/images/marketing/1743159322237.webp",
 
-let brands  = [
+    "https://images.meesho.com/images/marketing/1743159363205.webp",
 
-"https://images.meesho.com/images/marketing/1743159302944.webp",
+    "https://images.meesho.com/images/marketing/1743159377598.webp",
 
+    "https://images.meesho.com/images/marketing/1743159393231.webp",
 
-"https://images.meesho.com/images/marketing/1743159322237.webp",
+    "https://images.meesho.com/images/marketing/1743159415385.webp",
 
+    "	https://images.meesho.com/images/marketing/1744636558884.webp",
 
-"https://images.meesho.com/images/marketing/1743159363205.webp",
+    "https://images.meesho.com/images/marketing/1744636599446.webp",
 
+    "https://images.meesho.com/images/marketing/1743159302944.webp",
 
-"https://images.meesho.com/images/marketing/1743159377598.webp",
+    "https://images.meesho.com/images/marketing/1743159322237.webp",
 
+    "https://images.meesho.com/images/marketing/1743159363205.webp",
 
-"https://images.meesho.com/images/marketing/1743159393231.webp",
+    "https://images.meesho.com/images/marketing/1743159377598.webp",
 
+    "https://images.meesho.com/images/marketing/1743159393231.webp",
 
-"https://images.meesho.com/images/marketing/1743159415385.webp",
+    "https://images.meesho.com/images/marketing/1743159415385.webp",
 
+    "	https://images.meesho.com/images/marketing/1744636558884.webp",
 
-"	https://images.meesho.com/images/marketing/1744636558884.webp",
+    "https://images.meesho.com/images/marketing/1744636599446.webp",
 
-
-"https://images.meesho.com/images/marketing/1744636599446.webp",
-
-
-"https://images.meesho.com/images/marketing/1743159302944.webp",
-
-
-"https://images.meesho.com/images/marketing/1743159322237.webp",
-
-
-
-"https://images.meesho.com/images/marketing/1743159363205.webp",
-
-
-"https://images.meesho.com/images/marketing/1743159377598.webp",
-
-
-"https://images.meesho.com/images/marketing/1743159393231.webp",
-
-
-"https://images.meesho.com/images/marketing/1743159415385.webp",
-
-
-"	https://images.meesho.com/images/marketing/1744636558884.webp",
-
-
-"https://images.meesho.com/images/marketing/1744636599446.webp",
-
-
-"https://images.meesho.com/images/marketing/1743159302944.webp",
-
-]
-
-
-
-
-
-
-
+    "https://images.meesho.com/images/marketing/1743159302944.webp",
+  ];
 
   return (
-        <div
+    <div
       className="
         relative w-full overflow-hidden
        
@@ -74,9 +46,9 @@ let brands  = [
         border-pink-300
        h-25 
        mt-10
-       mb-30
+       mb-10
         group
-
+z-[-1]
        
       
       "
@@ -85,7 +57,7 @@ let brands  = [
       <div
         className="
           flex items-center  gap-10
-          absolute left-0 top-1/2 -translate-y-1/2
+          sticky  left-0 top-1/2 -translate-y-1/2
           animate-marquee
           group-hover:[animation-play-state:paused]
         
@@ -106,7 +78,6 @@ let brands  = [
           />
         ))}
       </div>
-      
     </div>
   );
 };

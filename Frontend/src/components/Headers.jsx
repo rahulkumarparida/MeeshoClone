@@ -41,7 +41,7 @@ const Headers = () => {
       const fetchCategories = async () => {
         const response = await api.get("/products/categories/");
 
-        console.log("category:", response);
+        // console.log("category:", response);
         setCategory(response.data);
       };
       fetchCategories();
