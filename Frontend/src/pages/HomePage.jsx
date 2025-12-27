@@ -1,74 +1,39 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
-import AsyncApiCall from "../utils/asyncapicall.utils.js";
-import api from "../services/api";
+
+import HeroBanner from "../components/HeroBanner.jsx";
+import { Undo2 , Birdhouse, ChevronsDown} from "lucide-react";
+
+import StyledCategorySection from "../components/StyledCategorySection.jsx";
+import SecondBanner from "../components/SecondBanner.jsx";
+import ScrollBrandsComponents from "../components/ScrollBrandsComponents.jsx";
 
 const HomePage = () => {
-  const Categories = () => {
-    let [category, setCategory] = useState(null);
-    let [activeMenu, setActiveMenu] = useState(null);
-    const activeCategory =
-      activeMenu && category
-        ? category.find((cat) => cat.id === activeMenu)
-        : null;
 
-    function renderCategories(categories) {
-      console.log(activeMenu != null ? activeMenu : "sef");
+  
 
-      return categories.map((cat) => (
-        <div key={cat.id} className="ml-4">
-          <span
-            onClick={() => {
-              setActiveMenu(cat.id);
-            }}
-            className="hover:text-pink-600 hover:border-b-4 transition cursor-pointer"
-          >
-            {cat.name}
-          </span>
-        </div>
-      ));
-    }
 
-    useEffect(() => {
-      const fetchCategories = async () => {
-        const response = await api.get("/products/categories/");
-
-        console.log("category:", response);
-        setCategory(response.data);
-      };
-      fetchCategories();
-    }, []);
-
-    return (
-      <>
-        <div className="flex p-4">
-          {category != null ? renderCategories(category) : ""}
-        </div>
-        {activeMenu != null ? (
-          <div>
-            {activeCategory && (
-              <div>
-                {activeCategory.children.map((ele) => (
-                  <span key={ele.id}>
-                    {ele.name}
-                    <br />
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-        ) : (
-          ""
-        )}
-      </>
-    );
-  };
 
   return (
-    <div className="max-h-screen max-w-screen border">
-      <div className="categoryBox">
-        <Categories />
+    <div className="long flex flex-col ">
+        <div className=" bg-[#c328da] mt-30 lg:mt-22">
+        <HeroBanner  />
+        </div>  
+
+        <div className="stripe  border m-3 rounded-xl border-pink-400 bg-pink-100 mt-4 p-2 flex justify-evenly">
+          <div className="flex px-1 mx-4 dayreturn hover:text-pink-800 transition duration-100 cursor-default "> <Undo2 className="mx-1 text-pink-600 " />  7 Days Easy Return</div>
+          <div className="flex px-1 mx-4 cashondelivery hover:text-pink-800 transition duration-100 cursor-default "> <Birdhouse className="mx-1 text-pink-600 " />  Cash on Delivery</div>
+          <div className="flex px-1 mx-4  hover:text-pink-800 transition duration-100 cursor-default lowprice"><ChevronsDown className="mx-1 text-pink-600 " />  Lowest Prices</div>
+        </div>
+     
+      <div className="catsectionimg">
+        <StyledCategorySection />
       </div>
+      <div className="secondbanner">
+        <SecondBanner/>
+      </div>
+
+    <div className="scrollbrand">
+      <ScrollBrandsComponents />
+    </div>
     </div>
   );
 };

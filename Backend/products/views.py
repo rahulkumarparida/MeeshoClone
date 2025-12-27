@@ -15,15 +15,15 @@ from .permissions import IsSellerOrReadOnly
 # Create your views here.
 class ProductViewset(viewsets.ModelViewSet):
     queryset = Product.objects.all().select_related('category').prefetch_related('images')
-    permission_classes = [IsSellerOrReadOnly]
-    filter_backends = [DjangoFilterBackend , filters.SearchFilter , filters.OrderingFilter]
+    # permission_classes = [IsSellerOrReadOnly]
+    filter_backends = [DjangoFilterBackend , filters.SearchFilter , filters.OrderingFilter ]
+ 
     filterset_fields = {
         'price':['gte','lte'],
-        'category':['exact'],
-        'is_active':['exact']
+        'category__slug': ['exact']
     }
-    seacrh_fields = ['title' , 'description']
-    ordering_fields = ['price' , '-created_at']
+    search_fields  = ['title' , 'description']
+    ordering_fields = ['price' , 'created_at']
     
     
     
@@ -51,14 +51,15 @@ class ProductViewset(viewsets.ModelViewSet):
         return qs
 
     def list(self, request, *args, **kwargs):
-        cache_key = "products"
-        if cache.get(cache_key):
-            data = cache.get(cache_key)
-            print("caching: ",data)
-            return Response(ProductReadSerializer(data , many=True).data)
-        qs = self.get_queryset()    
-        cache.set(cache_key , qs , timeout=60)
-        return super().list(request, *args, **kwargs)
+        cache_key = f"products:{request.get_full_path()}"
+        
+        data = cache.get(cache_key)
+        if data:
+            return Response(data)
+
+        response = super().list(request, *args, **kwargs)
+        cache.set(cache_key, response.data, timeout=60)
+        return response
 
 
     

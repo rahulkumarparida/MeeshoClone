@@ -1,18 +1,24 @@
 import React from 'react'
 import Login from './pages/Login'
 import { Route, Routes } from 'react-router-dom'
-import HomePage from './pages/HomePage'
-import Headers from './components/Headers'
+import HomePage from './pages/HomePage.jsx'
+
+import Headers from './components/Headers.jsx'
+
 const App = () => {
   return (
-    <div className=''>
-      <div className='h-[12%]'>
+    <div className='min-h-screen'>
+      <div className=' bg-white w-full '>
         <Headers/>
       </div>
-      <Routes>
+      
+      <div > 
+
+      <Routes >
         <Route path="/" element={<HomePage />} /> 
         <Route path="/login" element={<Login />} /> 
       </Routes>
+      </div>
     </div>
   )
 }

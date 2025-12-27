@@ -1,2 +1,32 @@
 @import "tailwindcss";
 
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;             /* Chrome, Safari, Opera */
+}
+
+
+
+.secondbanner{
+  background: url("./assets/meeshoBanner2.webp") no-repeat ;
+  background-size: 100vw auto;
+  
+}
+
+
+@keyframes marquee {
+  0% {
+    transform: translate(0, -50%);
+  }
+  100% {
+    transform: translate(-50%, -50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
