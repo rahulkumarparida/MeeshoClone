@@ -1,8 +1,8 @@
 import React from "react";
-import { useState } from "react";
+import { useState , useEffect } from "react";
 import { ChevronDown, Check } from "lucide-react";
-import { useProducts } from "../context/ProductContext";
-
+import { useProducts } from "../../context/ProductContext.jsx";
+import api from "../../services/api.js";
 
 
 // Filters calls
@@ -11,17 +11,43 @@ import { useProducts } from "../context/ProductContext";
 // http://127.0.0.1:8000/products/?ordering=-price ordering by price - or ""
 // http://127.0.0.1:8000/products/?ordering=created_at ordering bt created date
 
+
 const options = [
-  { label: "New Arrival", value: "created_at" },
-  { label: "Price: High to Low", value: "-price" },
-  { label: "Price: Low to High", value: "price" },
+  { label: "All Products", value: null},
+  { label: "New Arrival",  value: "ordering=created_at" },
+  { label: "Price: High to Low", value: "ordering=-price" },
+  { label: "Price: Low to High", value: "ordering=price" },
 //   { label: "Ratings", value: "rating" },
 ];
 
 const FilterProductsHome = () => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(options[0]);
-const {filters, setFilters  ,currentAPIcall, setCurrentAPIcall} = useProducts()
+const {fetchFilteredData,filters, setFilters , products, setProducts} = useProducts()
+
+
+
+
+
+useEffect(() => {
+  
+if (selected.value !== null) {
+  fetchFilteredData(selected  )
+  console.log(selected);
+}
+
+  
+
+
+
+
+
+
+}, [selected])
+
+
+
+
 
 
   return (
@@ -29,7 +55,7 @@ const {filters, setFilters  ,currentAPIcall, setCurrentAPIcall} = useProducts()
       <div className=" w-full inline-block text-sm z-0">
         {/* Button */}
         <button
-          onClick={() => {setOpen(!open);}}
+          onClick={() => {setOpen(!open);  }}
           className="
           flex items-center justify-between gap-2
           px-4 py-2
@@ -37,14 +63,11 @@ const {filters, setFilters  ,currentAPIcall, setCurrentAPIcall} = useProducts()
           rounded-full bg-white
           shadow-sm
           hover:border-pink-500
-          transition
-           
-        "
-        
-        >
+          transition      
+        ">
           <span className="text-gray-700">
             <span className="text-gray-500 mr-1">Sort by:</span>
-            {selected.label}
+            {selected.label }
           </span>
 
           <ChevronDown
@@ -70,20 +93,10 @@ const {filters, setFilters  ,currentAPIcall, setCurrentAPIcall} = useProducts()
                 onClick={() => {
                   setSelected(option);
                   setOpen(false);
+                  setFilters(true)
                 }}
-                className={`
-                 flex items-center justify-between
-                px-7 py-2
-                text-left
-                hover:bg-pink-50
-                transition
-           
-                ${
-                  selected.value === option.value
-                    ? "text-pink-600 font-medium bg-pink-100"
-                    : "text-gray-700"
-                }
-              `}
+                className={`flex items-center justify-between px-7 py-2 text-left hover:bg-pink-50 transition
+                ${selected.value === option.value? "text-pink-600 font-medium bg-pink-100": "text-gray-700"}`}
               >
                 {option.label}
                 {selected.value === option.value && (

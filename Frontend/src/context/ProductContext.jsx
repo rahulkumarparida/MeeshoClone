@@ -1,20 +1,34 @@
-import React from 'react'
-import { createContext ,  useContext , useState } from 'react'
-import LocalStorageManager from "../hooks/useLocalStorage.js"
 
+import { createContext ,  useContext , useState } from 'react'
+import api from '../services/api.js';
 
 const ProductContext = createContext();
 
 export const ProductProvider =({children}) => {
-    const [filters, setFilters] = useState(null);
+    const [filters, setFilters] = useState(false);
     const [category, setCategory] = useState(null);
      const [products, setProducts] = useState([]);
-  const [currentAPIcall, setCurrentAPIcall] = useState(`/products/?page=1`);
 
-    console.log("APICALL:" , currentAPIcall);
+const fetchFilteredData = async (selected) => {
+
+  if (selected.value !== null) {
+      let url =`/products/?${selected.value}`
+      let response =await api.get(url)
+
+      console.log(response);
+
+      setProducts([...response.data.results])
+
+  }
+
+
+  
+
+
+}
     
   return (
-   <ProductContext.Provider value={{ filters, setFilters ,category, setCategory , products, setProducts , currentAPIcall, setCurrentAPIcall }}>
+   <ProductContext.Provider value={{ fetchFilteredData, filters, setFilters ,category, setCategory , products, setProducts }}>
     {children}
    </ProductContext.Provider>
   )

@@ -4,42 +4,44 @@ import api from "../services/api.js";
 import ProductsCard from "./elements/ProductsCard.jsx";
 import { data, useAsyncError } from "react-router-dom";
 import { useRef } from "react";
-import FilterProductsHome from "./FilterProductsHome.jsx";
+import FilterProductsHome from "./elements/FilterProductsHome.jsx";
 
 import { useProducts } from "../context/ProductContext.jsx";
 
 const HomeProducts = () => {
-    const {products , setProducts ,currentAPIcall, setCurrentAPIcall} = useProducts()      
+    const {filters ,products , setProducts } = useProducts()      
     
 
 
-  const [page, setPage] = useState(1);
-  const [isLoading, setLoading] = useState(false);
-  const [hasNext, setHasNext] = useState(true);
-  const [error, setError] = useState(null);
+    const [page, setPage] = useState(1);
+    const [isLoading, setLoading] = useState(false);
+    const [hasNext, setHasNext] = useState(true);
+    const [error, setError] = useState(null);
 
-  const observerRef = useRef(null);
-  const loaderRef = useRef(null);
+    const observerRef = useRef(null);
+    const loaderRef = useRef(null);
+
     
-  
   
   //   Infinite Scrolling
   const fetchProduct = async () => {
-      setCurrentAPIcall(`/products/?page=${page}`)  
+       console.log("page value:",page);
+       
+    
     if (isLoading || !hasNext) return;
 
     setLoading(true);
     setError(null);
 
     try {
+      const buildProductsURL = `/products/?page=${page}`
 
+      let response = await api.get(buildProductsURL);
 
-      let response = await api.get(currentAPIcall);
-      console.log(response.data);
+        // console.log(response.data);
         setHasNext(response.data.next == null ? false:true)
-        setPage(prev => prev + 1);
-     
-      setProducts((prev) => [...prev, ...response.data.results]);
+        setPage((prev) => prev + 1); 
+        setProducts((prev) => [...prev, ...response.data.results]);
 
        
       
@@ -50,22 +52,27 @@ const HomeProducts = () => {
     }
   };
 
-  useEffect(() => {
-    fetchProduct();
-    console.log("Boolean:",currentAPIcall == "/^\/products\/\?page=\d+$");
+  // useEffect(() => {
     
-  }, []);
+  //   fetchProduct();
+   
+    
+  // }, []);
+
+
 
   useEffect(() => {
     if (!loaderRef.current) return;
 
     observerRef.current = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting || currentAPIcall == "/^\/products\/\?page=\d+$") {
+        if (entries[0].isIntersecting && filters == false) {
           fetchProduct();
+        }else{
+
         }
       },
-      { threshold: 0.5 }
+      { threshold: 0.75 }
     );
 
     observerRef.current.observe(loaderRef.current);
@@ -100,7 +107,7 @@ const HomeProducts = () => {
       >
         {products.map((ele, idx) => {
           return (
-            <div key={idx}>
+            <div key={ele.id}>
               <ProductsCard ele={ele} />
             </div>
           );
@@ -109,7 +116,7 @@ const HomeProducts = () => {
         {/* Checks if the user has scrolled to the required threshold to trigger the API call */}
         <div ref={loaderRef} className="h-20 flex items-center justify-center">
           {isLoading && <p>Loading products...</p>}
-          {!hasNext && <p className="text-lg text-gray-700 p-3 m-2">No more products</p>}
+          {!hasNext && <p className="text-lg text-gray-700 p-3 m-2">No more products {filters?"YES":"NO"}</p>}
           {error && <p className="text-red-500">{error}</p>}
         </div>
       </div>

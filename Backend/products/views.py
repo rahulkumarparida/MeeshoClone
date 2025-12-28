@@ -15,13 +15,14 @@ from .permissions import IsSellerOrReadOnly
 # Create your views here.
 class ProductViewset(viewsets.ModelViewSet):
     queryset = Product.objects.all().select_related('category').prefetch_related('images')
-    # permission_classes = [IsSellerOrReadOnly]
+    permission_classes = [IsSellerOrReadOnly]
     filter_backends = [DjangoFilterBackend , filters.SearchFilter , filters.OrderingFilter ]
  
     filterset_fields = {
         'price':['gte','lte'],
         'category__slug': ['exact']
     }
+    
     search_fields  = ['title' , 'description']
     ordering_fields = ['price' , 'created_at']
     
@@ -48,6 +49,7 @@ class ProductViewset(viewsets.ModelViewSet):
     
     def get_queryset(self):
         qs = super().get_queryset()
+        print(qs[0])
         return qs
 
     def list(self, request, *args, **kwargs):
