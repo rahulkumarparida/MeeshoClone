@@ -4,47 +4,39 @@ import api from "../services/api.js";
 import ProductsCard from "./elements/ProductsCard.jsx";
 import { data, useAsyncError } from "react-router-dom";
 import { useRef } from "react";
-import FilterProductsHome from "./elements/FilterProductsHome.jsx";
+import SortProductsHome from "./elements/SortProductsHome.jsx";
 
 import { useProducts } from "../context/ProductContext.jsx";
+import FilterProductsHome from "./elements/FilterProductsHome.jsx";
 
 const HomeProducts = () => {
-    const {filters ,products , setProducts } = useProducts()      
-    
+  const { filters, products, setProducts } = useProducts();
 
+  const [page, setPage] = useState(1);
+  const [isLoading, setLoading] = useState(false);
+  const [hasNext, setHasNext] = useState(true);
+  const [error, setError] = useState(null);
 
-    const [page, setPage] = useState(1);
-    const [isLoading, setLoading] = useState(false);
-    const [hasNext, setHasNext] = useState(true);
-    const [error, setError] = useState(null);
+  const observerRef = useRef(null);
+  const loaderRef = useRef(null);
 
-    const observerRef = useRef(null);
-    const loaderRef = useRef(null);
-
-    
-  
   //   Infinite Scrolling
   const fetchProduct = async () => {
-       console.log("page value:",page);
-       
-    
+    console.log("page value:", page);
+
     if (isLoading || !hasNext) return;
 
     setLoading(true);
     setError(null);
 
     try {
-      const buildProductsURL = `/products/?page=${page}`
+      const buildProductsURL = `/products/?page=${page}`;
 
       let response = await api.get(buildProductsURL);
 
-        // console.log(response.data);
-        setHasNext(response.data.next == null ? false:true)
-        setPage((prev) => prev + 1); 
-        setProducts((prev) => [...prev, ...response.data.results]);
-
-       
-      
+      setHasNext(response.data.next == null ? false : true);
+      setPage((prev) => prev + 1);
+      setProducts((prev) => [...prev, ...response.data.results]);
     } catch (error) {
       setError("Failed to load products");
     } finally {
@@ -53,13 +45,10 @@ const HomeProducts = () => {
   };
 
   // useEffect(() => {
-    
+
   //   fetchProduct();
-   
-    
+
   // }, []);
-
-
 
   useEffect(() => {
     if (!loaderRef.current) return;
@@ -68,8 +57,7 @@ const HomeProducts = () => {
       (entries) => {
         if (entries[0].isIntersecting && filters == false) {
           fetchProduct();
-        }else{
-
+        } else {
         }
       },
       { threshold: 0.75 }
@@ -77,35 +65,36 @@ const HomeProducts = () => {
 
     observerRef.current.observe(loaderRef.current);
 
-    return () => observerRef.current? observerRef.current.disconnect() :observerRef.current;
-
+    return () =>
+      observerRef.current
+        ? observerRef.current.disconnect()
+        : observerRef.current;
   }, [hasNext, isLoading]);
-// __here__
+  // __here__
 
-
-
-// Filters calls
-// http://127.0.0.1:8000/products/?category__slug=camera-accessories category based filter products
-// http://127.0.0.1:8000/products/?price__gte=12333&price__lte= price based filter products 
-// http://127.0.0.1:8000/products/?ordering=-price ordering by price - or ""
-// http://127.0.0.1:8000/products/?ordering=created_at ordering bt created date
-
-
-
-
+  // Filters calls
+  // http://127.0.0.1:8000/products/?category__slug=camera-accessories category based filter products
+  // http://127.0.0.1:8000/products/?price__gte=12333&price__lte= price based filter products
+  // http://127.0.0.1:8000/products/?ordering=-price ordering by price - or ""
+  // http://127.0.0.1:8000/products/?ordering=created_at ordering bt created date
 
   return (
     <div className="mt-8   md:flex">
-      <div className="filters md:w-[25%] border p-2">
 
-        <FilterProductsHome />
-
+      <div className=" filters md:w-[25%] border-r-2 border-pink-200 p-2">
+        <div>
+          <SortProductsHome />
+        </div>
+        <div>
+            <FilterProductsHome />
+        </div>
       </div>
+
       <div
         id="products"
         className="  products md:w-[75%]   p-2 flex flex-wrap "
       >
-        {products.map((ele, idx) => {
+        {products.length == 0?<div className="text-4xl text-gray-700">Products are not availiable right now.</div>:products.map((ele, idx) => {
           return (
             <div key={ele.id}>
               <ProductsCard ele={ele} />
@@ -116,7 +105,11 @@ const HomeProducts = () => {
         {/* Checks if the user has scrolled to the required threshold to trigger the API call */}
         <div ref={loaderRef} className="h-20 flex items-center justify-center">
           {isLoading && <p>Loading products...</p>}
-          {!hasNext && <p className="text-lg text-gray-700 p-3 m-2">No more products {filters?"YES":"NO"}</p>}
+          {!hasNext && (
+            <div className="lg:text-2xl text-gray-700 p-3 m-2 text-center">
+              No more products 
+            </div>
+          )}
           {error && <p className="text-red-500">{error}</p>}
         </div>
       </div>

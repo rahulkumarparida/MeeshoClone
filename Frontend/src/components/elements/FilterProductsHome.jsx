@@ -1,111 +1,162 @@
 import React from "react";
-import { useState , useEffect } from "react";
-import { ChevronDown, Check } from "lucide-react";
-import { useProducts } from "../../context/ProductContext.jsx";
+import { useState, useEffect } from "react";
 import api from "../../services/api.js";
+import { useProducts } from "../../context/ProductContext";
+import { ChevronDown , ChevronUp } from "lucide-react";
+
+
+
+
 
 
 // Filters calls
 // http://127.0.0.1:8000/products/?category__slug=camera-accessories category based filter products
-// http://127.0.0.1:8000/products/?price__gte=12333&price__lte= price based filter products
-// http://127.0.0.1:8000/products/?ordering=-price ordering by price - or ""
-// http://127.0.0.1:8000/products/?ordering=created_at ordering bt created date
-
-
-const options = [
-  { label: "All Products", value: null},
-  { label: "New Arrival",  value: "ordering=created_at" },
-  { label: "Price: High to Low", value: "ordering=-price" },
-  { label: "Price: Low to High", value: "ordering=price" },
-//   { label: "Ratings", value: "rating" },
-];
 
 const FilterProductsHome = () => {
-  const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState(options[0]);
-const {fetchFilteredData,filters, setFilters , products, setProducts} = useProducts()
-
-
-
-
-
-useEffect(() => {
+  const [selectedCat, setSelectedCat] = useState(null);
+  const {filters, setFilters, products, setProducts } = useProducts(null);
+  const [fetchedCategories, setFetchedCategories] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
   
-if (selected.value !== null) {
-  fetchFilteredData(selected  )
-  console.log(selected);
+  // Fetches Category 
+  const fetchCatergory = async () => {
+    const response = await api.get("/products/categories/");
+    // console.log(response);
+    setFetchedCategories(response.data);
+  };
+  useEffect(() => {
+    fetchCatergory();
+  }, []);
+// __________________
+
+
+
+
+// Fetches FIletred data
+const fetchfiletrdData = async () => {
+    let url = `/products/?category__slug=${selectedCat}`
+    console.log("sleected",selectedCat);
+    if (selectedCat !== null) {
+        let response =await api.get(url)
+        console.log("Products: ",response);
+        
+         response.data.results.length > 0?
+         setProducts([...response.data.results])
+         :
+            setProducts([])
+   
+    }
+    
 }
 
-  
+useEffect(() => {
+  setFilters(true)  
+  fetchfiletrdData()
+
+
+ 
+}, [selectedCat])
+
+// _____________________________________
 
 
 
+  const renderCategories = (ele) => {
+    if (!ele.children) return;
 
+    if (ele.children.length > 0) {
+      // console.log("parent",ele.name);
 
+      return (
+        <div
+          name={ele.name}
+          id={ele.id}
+          className={`cursor-default flex flex-wrap md:block   `}
 
-}, [selected])
+        >
+            <div className="flex  hover:text-pink-500 transition duration-200 my-3 ml-1"
+            name={ele.name}
+            id={ele.id} 
+            onClick={(e) => {
+            setIsOpen(!isOpen);
+            setSelectedId(e.target.id);
+          }}>
+          {ele.name }
+           {
+            isOpen && selectedId == ele.id ? <ChevronUp id={ele.id} 
+            onClick={(e) => {
+            setIsOpen(!isOpen);
+            setSelectedId(e.target.id);
 
+          }}
+          
+          
+          />: <ChevronDown id={ele.id} 
+            onClick={(e) => {
+            setIsOpen(!isOpen);
+            setSelectedId(e.target.id);
+            
+          }} 
 
+          />
+           }
+                </div>
 
+          {ele.children.map((elem) => {
 
+            return elem.children.length > 0 ? (
+              renderCategories(elem)
+            ) : (
+              <span
+                key={elem.id}
+                value={elem.slug}
+                onClick={(e)=>{setSelectedCat(e.target.getAttribute("value"));
+                }}
+                className={`ml-4 cursor-pointer border border-gray-300 p-2  ${
+                  isOpen && selectedId == ele.id ? "flex flex-col" : "hidden"
+                } hover:text-pink-500 transition duration-200 active:text-pink-500`}
+              >
+                {elem.name}
+              </span>
+            );
+          })}
+        </div>
+      );
+    } else {
+      return <option value={ele.slug} >{ele.name}</option>;
+      
+    }
+  };
 
 
   return (
-    <div>
-      <div className=" w-full inline-block text-sm z-0">
-        {/* Button */}
-        <button
-          onClick={() => {setOpen(!open);  }}
-          className="
-          flex items-center justify-between gap-2
-          px-4 py-2
-          border border-gray-300
-          rounded-full bg-white
-          shadow-sm
-          hover:border-pink-500
-          transition      
-        ">
-          <span className="text-gray-700">
-            <span className="text-gray-500 mr-1">Sort by:</span>
-            {selected.label }
-          </span>
+    <div className="flex flex-col  text-gray-600 text-lg">
+      <div className="filterhead font-bold ml-9">
+        <span className="">
+          FILTER
+          <p className="text-xs">100+ products</p>
+        </span>
+      </div>
+      <hr className="text-gray-300 border mt-4 mx-5" />
 
-          <ChevronDown
-            size={18}
-            className={`transition-transform ${open ? "rotate-180" : ""}`}
-          />
-        </button>
-
-        {/* Dropdown */}
-        {open && (
-          <div
-            className="
-            absolute z-50 mt-2 w-fit
-            bg-white rounded-xl
-            border border-gray-200
-            shadow-lg
-            overflow-hidden
-          "
-          >
-            {options.map((option) => (
-              <button
-                key={option.value}
-                onClick={() => {
-                  setSelected(option);
-                  setOpen(false);
-                  setFilters(true)
-                }}
-                className={`flex items-center justify-between px-7 py-2 text-left hover:bg-pink-50 transition
-                ${selected.value === option.value? "text-pink-600 font-medium bg-pink-100": "text-gray-700"}`}
-              >
-                {option.label}
-                {selected.value === option.value && (
-                  <Check size={16} className="text-pink-600" />
-                )}
-              </button>
-            ))}
-          </div>
-        )}
+      <div className="categories flex felx-col  md:block px-6  mt-3">
+        <span>Category :</span>
+        <br />
+        <div className="cats">
+          {fetchedCategories !== null
+            ? fetchedCategories.map((ele, idx) => {
+                return (
+                  <div
+                    key={ele.id}
+                    className="ml-2 text-gray-900"
+                  >
+                    {renderCategories(ele)}
+                  </div>
+                );
+              })
+            : "NA"}
+        </div>
       </div>
     </div>
   );

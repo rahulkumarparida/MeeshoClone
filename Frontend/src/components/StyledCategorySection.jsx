@@ -42,12 +42,12 @@ const StyledCategorySection = () => {
 
 
   return (
-    <div className='flex mt-10 mb-10 pb-10 justify-evenly border-b border-pink-200 shadow-sm shadow-pink-300'>
+    <div className='flex mt-10 mb-10  justify-evenly border-b border-pink-200 shadow-sm shadow-pink-300'>
         {
             designInfo.map((ele , idx)=>{
 
                 return <span key={idx} title={ele.title} className=' hover:scale-[1.1] transition delay-75 duration-200'>
-                    <img src={ele.img} alt="" className='h-20 lg:h-50 ' loading='lazy' />
+                    <img src={ele.img} alt="" className='h-15 lg:h-40 flex-1' loading='lazy' />
                 </span>
 
             })

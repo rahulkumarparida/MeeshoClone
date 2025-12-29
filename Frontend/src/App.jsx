@@ -8,7 +8,7 @@ import Headers from './components/Headers.jsx'
 const App = () => {
   return (
     <div className='min-h-screen'>
-      <div className=' bg-white w-full '>
+      <div className='  '>
         <Headers/>
       </div>
       
