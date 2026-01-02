@@ -9,6 +9,8 @@ export const ProductProvider =({children}) => {
     const [category, setCategory] = useState(null);
      const [products, setProducts] = useState([]);
 
+     
+
 const fetchFilteredData = async (selected) => {
 
   if (selected.value !== null) {

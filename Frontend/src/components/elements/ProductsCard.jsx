@@ -8,6 +8,7 @@ const ProductsCard = ({ele}) => {
   return (
 
     <div className='m-4 p-4 border border-gray-400 rounded-xl shadow-lg w-fit hover:shadow-2xl transition duration-300 delay-60 flex flex-col justify-center items-center lg:w-60 cursor-pointer' title={ele.title}>
+      
        <div className="img">
         <img src={ele.images[0].image_url} alt="img" className='object-cover h-40' />
        </div>
@@ -23,6 +24,9 @@ const ProductsCard = ({ele}) => {
             <p className="counts p-2 px-3 text-gray-600">{ele.review_count} Reviews</p>
         </span>
        </div>
+
+   
+
     </div>
   )
 }

@@ -25,6 +25,7 @@ class ProductViewset(viewsets.ModelViewSet):
     
     search_fields  = ['title' , 'description']
     ordering_fields = ['price' , 'created_at']
+    lookup_field = "slug"
     
     
     

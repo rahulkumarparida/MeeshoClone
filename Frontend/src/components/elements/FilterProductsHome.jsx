@@ -14,7 +14,7 @@ import { ChevronDown , ChevronUp } from "lucide-react";
 
 const FilterProductsHome = () => {
   const [selectedCat, setSelectedCat] = useState(null);
-  const {filters, setFilters, products, setProducts } = useProducts(null);
+  const {filters, setFilters, products, setProducts } = useProducts();
   const [fetchedCategories, setFetchedCategories] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
@@ -51,8 +51,9 @@ const fetchfiletrdData = async () => {
 }
 
 useEffect(() => {
-  setFilters(true)  
+
   fetchfiletrdData()
+  setFilters(true)    
 
 
  

@@ -2,27 +2,38 @@ import React from "react";
 import { useEffect, useState } from "react";
 import api from "../services/api.js";
 import ProductsCard from "./elements/ProductsCard.jsx";
-import { data, useAsyncError } from "react-router-dom";
+import { data, useAsyncError , useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import SortProductsHome from "./elements/SortProductsHome.jsx";
 
 import { useProducts } from "../context/ProductContext.jsx";
 import FilterProductsHome from "./elements/FilterProductsHome.jsx";
+import { Link } from "lucide-react";
 
+
+
+
+// Task Complete instead of using Link for redirection change to useNavigate()
 const HomeProducts = () => {
-  const { filters, products, setProducts } = useProducts();
+
+  const { filters,setFilters, products, setProducts } = useProducts();
 
   const [page, setPage] = useState(1);
   const [isLoading, setLoading] = useState(false);
   const [hasNext, setHasNext] = useState(true);
   const [error, setError] = useState(null);
-
+  
   const observerRef = useRef(null);
   const loaderRef = useRef(null);
+  const navigate = useNavigate();
+
+
+
 
   //   Infinite Scrolling
   const fetchProduct = async () => {
     console.log("page value:", page);
+    
 
     if (isLoading || !hasNext) return;
 
@@ -33,9 +44,10 @@ const HomeProducts = () => {
       const buildProductsURL = `/products/?page=${page}`;
 
       let response = await api.get(buildProductsURL);
-
+      console.log("Home Res: ",response);
+      
       setHasNext(response.data.next == null ? false : true);
-      setPage((prev) => prev + 1);
+      setPage((prev) => prev + 1);  
       setProducts((prev) => [...prev, ...response.data.results]);
     } catch (error) {
       setError("Failed to load products");
@@ -55,12 +67,16 @@ const HomeProducts = () => {
 
     observerRef.current = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && filters == false) {
+        setFilters(false)
+        if (filters==true) return console.log("filters",filters);
+        ;
+        if (entries[0].isIntersecting ) {
+          console.log("Done");
+          
           fetchProduct();
-        } else {
         }
       },
-      { threshold: 0.75 }
+      { threshold: 0.5 }
     );
 
     observerRef.current.observe(loaderRef.current);
@@ -96,7 +112,7 @@ const HomeProducts = () => {
       >
         {products.length == 0?<div className="text-4xl text-gray-700">Products are not availiable right now.</div>:products.map((ele, idx) => {
           return (
-            <div key={ele.id}>
+            <div key={ele.slug} >
               <ProductsCard ele={ele} />
             </div>
           );

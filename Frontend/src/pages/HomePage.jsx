@@ -40,7 +40,7 @@ const HomePage = () => {
       </div>
 
       <div className="homeproducts">
-        <div className="head font-bold  md:text-2xl lg:text-4xl text-gray-600">
+        <div className="head font-bold  md:text-2xl lg:text-4xl text-gray-600 ml-3 md:ml-7">
           Products For You
         </div>
         <div className="productpage">
