@@ -6,10 +6,13 @@ import SecondBanner from "../components/SecondBanner.jsx";
 import ScrollBrandsComponents from "../components/ScrollBrandsComponents.jsx";
 import HomeProducts from "../components/HomeProducts.jsx";
 import { ProductProvider } from "../context/ProductContext.jsx";
-
+import Headers from "../components/Headers.jsx";
 const HomePage = () => {
   return (
     <div className="long flex flex-col ">
+      <div className="header">
+        <Headers />
+      </div>
       <div className=" bg-[#c328da] mt-30 lg:mt-22">
         <HeroBanner />
       </div>

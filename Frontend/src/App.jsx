@@ -5,19 +5,22 @@ import HomePage from './pages/HomePage.jsx'
 
 import Headers from './components/Headers.jsx'
 import ProductsDetailsPage from './components/ProductsDetailsPage.jsx'
+import SearchedPage from './pages/SearchedPage.jsx'
 const App = () => {
   return (
     <div className='min-h-screen'>
-      <div className=''>
+      {/* <div className=''>
         <Headers/>
-      </div>
+      </div> */}
       
       <div > 
 
       <Routes >
         <Route path="/" element={<HomePage />} /> 
-        <Route path="/:id" element={<ProductsDetailsPage />} /> 
-        <Route path="/login" element={<Login />} /> 
+        <Route path="/:id" element={<ProductsDetailsPage />} />   
+        <Route path="/login" element={<Login />} />   
+        <Route path="/searchedProducts/:search/" element={<SearchedPage />} />   
+        <Route path="/searchedProducts/:search/:id" element={<ProductsDetailsPage />} />     
       </Routes>
       </div>
     </div>

@@ -67,7 +67,7 @@ export default function Login() {
 
   return (
     <div className=" flex  flex-col items-center justify-center bg-pink-100 ">
-      <Toaster position="top-right" reverseOrder={false} />
+      <Toaster toasterId="productCart" position="top-right" reverseOrder={false} />
       <form onSubmit={handleSubmit} className="mt-50 m-8 p-8 max-w-md mx-auto hover:scale-[1.08] transition">
         <img src={meeshoLogin} alt="" className="object-cover  pb-5 rounded-t-lg" />
         <h4 className="p-1  m-2 font-bold text-sm md:text-lg">Login to View your profile</h4>

@@ -76,7 +76,7 @@ const HomeProducts = () => {
           fetchProduct();
         }
       },
-      { threshold: 0.5 }
+      { threshold: 0.1, rootMargin: '200px' }
     );
 
     observerRef.current.observe(loaderRef.current);
@@ -86,6 +86,15 @@ const HomeProducts = () => {
         ? observerRef.current.disconnect()
         : observerRef.current;
   }, [hasNext, isLoading]);
+
+const handleProductClick = (slug)=> {
+  console.log("reached",slug);
+  
+
+  navigate(`/${slug}`)
+  
+}
+
   // __here__
 
   // Filters calls
@@ -112,8 +121,8 @@ const HomeProducts = () => {
       >
         {products.length == 0?<div className="text-4xl text-gray-700">Products are not availiable right now.</div>:products.map((ele, idx) => {
           return (
-            <div key={ele.slug} >
-              <ProductsCard ele={ele} />
+            <div key={ele.slug}  >
+              <ProductsCard ele={ele} onClick={() => handleProductClick(ele.slug)}  />
             </div>
           );
         })}
