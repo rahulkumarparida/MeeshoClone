@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage.jsx'
 import Headers from './components/Headers.jsx'
 import ProductsDetailsPage from './components/ProductsDetailsPage.jsx'
 import SearchedPage from './pages/SearchedPage.jsx'
+import ProfilePage from './pages/ProfilePage.jsx'
 const App = () => {
   return (
     <div className='min-h-screen'>
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />   
         <Route path="/searchedProducts/:search/" element={<SearchedPage />} />   
         <Route path="/searchedProducts/:search/:id" element={<ProductsDetailsPage />} />     
+        <Route path="/profile" element={<ProfilePage />} />     
       </Routes>
       </div>
     </div>

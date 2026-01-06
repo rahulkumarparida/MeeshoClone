@@ -1,4 +1,3 @@
-import React from 'react'
 import { useAuth } from '../context/AuthContext.jsx'
 import meeshoLogo from "../assets/meeshoLogo.png"
 import { User , Search , ShoppingCart  } from 'lucide-react'
@@ -176,7 +175,7 @@ function handleSearch(event){
             {
               verifyValue?
               <div className=' flex  cursor-pointer'>
-                <User className='h-7 w-7'  title="Profile" />
+                <User className='h-7 w-7'  title="Profile" onClick={()=>{navigate("/profile")}} />
                 <div className='border mx-4  cursor-pointer'></div>
                 <ShoppingCart className='h-7 w-7' title="Cart" />
               </div>

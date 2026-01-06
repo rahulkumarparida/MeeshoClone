@@ -16,7 +16,7 @@ export const registerUser = (data) => {
 
 
 export const verifyUser = async (data) => {
-  let { access, refresh } = data;
+  let {refresh, access} = data;
 
   try {
     // First verify the access token
