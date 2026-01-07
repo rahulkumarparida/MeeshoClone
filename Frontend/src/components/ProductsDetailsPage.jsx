@@ -5,6 +5,7 @@ import { ShoppingCart, ChevronsRight, Plus, Minus } from "lucide-react";
 import Headers from "./Headers";
 import LocalStorageManager from "../hooks/useLocalStorage.js";
 import toast, { Toaster } from "react-hot-toast";
+
 const ProductsDetailsPage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [productsDetails, setProductsDetails] = useState(null);
