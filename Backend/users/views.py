@@ -2,12 +2,14 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from .serializers import RegisterSerializer, UserSerializer, ProfileSerializer, SellerProfileSerializer
-from .models import User, SellerProfile
+from .models import User, SellerProfile , Profile
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAdminUser
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
 from core.throttles import RegisteringRateThrottle
+from django.db import transaction
+from config.services import validate_authorization
 
 
 class RegisterView(generics.CreateAPIView):
@@ -30,6 +32,71 @@ class ProfileUpdateView(generics.UpdateAPIView):
 
     def get_object(self):
         return self.request.user.profile
+    
+    def profile_update(self , request , *args , **kwargs):
+        print(request.FILES)
+        try:
+            with transaction.atomic():
+                data = request.data
+                authorized = User.objects.select_for_update().get(id=request.user.id)
+                profile = Profile.objects.select_for_update().get(user=authorized)
+                if authorized:
+                    authorized.first_name = data['first_name'] or authorized.first_name
+                    authorized.last_name = data['last_name'] or authorized.last_name
+                    authorized.save()
+                    profile = Profile.objects.select_for_update().get(user=authorized)
+                    profile.phone = data['phone'] or profile.phone
+                    profile.address = data['address'] or profile.address
+                    avatar = request.FILES.get('avatar')
+                    if avatar:
+                        profile.avatar = avatar 
+                    else:
+                        profile.avatar = profile.avatar
+                    profile.save()
+                    
+                    response = UserSerializer(authorized)
+                    print(response)
+                    return Response(response.data,status=status.HTTP_202_ACCEPTED)
+                    
+                    
+                return Response({"details":"No user found"}, status=status.HTTP_401_UNAUTHORIZED)
+                
+            
+        except User.DoesNotExist :
+            return Response({"details":"No user found"}, status=status.HTTP_401_UNAUTHORIZED)
+    
+    
+    def seller_profile_update(self , request , *args , **kwargs):
+        pass
+    
+    
+    def partial_update(self, request, *args, **kwargs):
+        reqUser = request.user
+        
+        
+        if validate_authorization(self , request=request):
+            try:
+                with transaction.atomic():
+                    authUser = User.objects.get(id=reqUser.id)
+                    
+                    if authUser.role == "customer":
+                
+                        return self.profile_update( request, *args, **kwargs)
+                    if authUser.role == "seller":
+                        self.seller_profile_update(request, *args, **kwargs)
+                        return
+                
+            
+            except User.DoesNotExist :
+                return Response({"details":"No user found"}, status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response({"details":"No user found"}, status=status.HTTP_401_UNAUTHORIZED)
+                
+            
+        return super().partial_update(request, *args, **kwargs)
+    
+    
+    
 
 class LogoutView(APIView):
     permission_classes = [permissions.IsAuthenticated]

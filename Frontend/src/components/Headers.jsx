@@ -177,7 +177,7 @@ function handleSearch(event){
               <div className=' flex  cursor-pointer'>
                 <User className='h-7 w-7'  title="Profile" onClick={()=>{navigate("/profile")}} />
                 <div className='border mx-4  cursor-pointer'></div>
-                <ShoppingCart className='h-7 w-7' title="Cart" />
+                <ShoppingCart className='h-7 w-7' title="Cart" onClick={()=>{navigate("/cart")}} />
               </div>
               :
               <div className='flex items-center p-2' >

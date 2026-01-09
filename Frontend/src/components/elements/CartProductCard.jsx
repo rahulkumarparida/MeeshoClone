@@ -52,6 +52,28 @@ const updateCartProduct = async (cartItemId , qty)=> {
 }
 
 
+const removeCartItem = async () => {
+  const tokens = new LocalStorageManager("tokens")
+  const access = tokens.get().access
+  
+  const item = ele.id
+  try{
+    let response = await api.delete(`/cart/remove/${item}/`,{
+      headers:{
+        "Authorization":`Bearer ${access}`
+      }
+    })
+    if(response.status == 204){
+      location.reload()
+    }
+    console.log(response);
+    
+  }catch(error){
+    console.error("Error while removing cart item.")
+  }
+}
+
+
 
 
 
@@ -106,6 +128,10 @@ const updateCartProduct = async (cartItemId , qty)=> {
            <div></div>
            <div className="text-gray-800 text-center mt-4 w-full border border-gray-200">
              ₹{ele.unit_price * ele.quantity}
+           </div>
+           <div></div>
+           <div className="remove text-center  p-1 m-3 border-2 rounded-sm border-gray-500 hover:bg-pink-500 hover:text-white hover:border-pink-500 transition duration-75" onClick={removeCartItem}>
+            Remove
            </div>
         </div>
     </div>

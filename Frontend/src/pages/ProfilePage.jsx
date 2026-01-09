@@ -3,11 +3,17 @@ import LocalStorageManager from "../hooks/useLocalStorage.js"
 import api from "../services/api.js"
 import { verifyUser } from "../services/auth.api"
 import { Camera } from "lucide-react"
+import { useNavigate } from "react-router-dom"
+import meeshoLogo from "../assets/meeshoLogo.png"
+
 const ProfilePage = () => {
+    const [userData, setUserData] = useState(null)  
+    const [verifyUserValue , setVerifyUserValue] = useState(null)   
+    
+    const navigate = useNavigate()
     const tokenStorage = new LocalStorageManager("tokens")
-    const [userData, setUserData] = useState(null)
     const tokens = tokenStorage.get()
-    const [verifyUserValue , setVerifyUserValue] = useState(null)
+
     const fetchUserData = async ()=>{
         const access = tokens.access
         setVerifyUserValue(await verifyUser(tokens))
@@ -40,18 +46,18 @@ useEffect(() => {
 
 return verifyUserValue !== null&& verifyUserValue.valid && userData != null ?
  (
-    <div className="flex flex-col-reverse md:flex-row">
-        <div className="leftSidebar  border-r border-pink-200  md:h-screen   flex flex-col  p-4  md:w-[31%]">
-            <span className=" border-2 border-transparent my-3  p-5 text-center  hover:border-pink-400 transition duration-150 cursor-pointer rounded shadow hover:shadow-xl ">
-                Home
+    <div className="flex flex-col md:flex-row">
+        <div className="leftSidebar  border-r border-pink-200  md:h-screen   flex flex-row md:flex-col p-4  md:w-[21%]">
+            <span className=" border-2 border-transparent my-3  p-5  " onClick={()=>{navigate('/')}}>
+                <img src={meeshoLogo} alt="" />
             </span>
-            <span className=" border-2 border-transparent my-3  p-5 text-center  hover:border-pink-400 transition duration-150 cursor-pointer rounded shadow hover:shadow-xl ">
+            <span className=" border-2 border-transparent my-3  p-5 text-center  hover:border-pink-400 transition duration-150 cursor-pointer rounded shadow hover:shadow-xl"  onClick={()=>{navigate('/profile/update')}} >
                 Update Profile
             </span>
-            <span className=" border-2 border-transparent my-3  p-5 text-center  hover:border-pink-400 transition duration-150 cursor-pointer rounded shadow hover:shadow-xl ">
+            <span className=" border-2 border-transparent my-3  p-5 text-center  hover:border-pink-400 transition duration-150 cursor-pointer rounded shadow hover:shadow-xl " onClick={()=>{navigate('/cart')}}>
                 Cart
             </span>
-            <span className=" border-2 border-transparent my-3  p-5 text-center  hover:border-pink-400 transition duration-150 cursor-pointer rounded shadow hover:shadow-xl ">
+            <span className=" border-2 border-transparent my-3  p-5 text-center  hover:border-pink-400 transition duration-150 cursor-pointer rounded shadow hover:shadow-xl " onClick={()=>{navigate('/')}}>
                 Order History
             </span>
         </div>
@@ -74,7 +80,7 @@ return verifyUserValue !== null&& verifyUserValue.valid && userData != null ?
 
                    <p> Address :</p> <br />
 
-                    <code className="p-6 border-5 mt-3 border-pink-200 rounded-xl bg-gray-200 text-black">
+                    <code className="mt-4 border-2 border-gray-200 p-4 w-full">
                         
                     {
                         userData.profile.address

@@ -10,6 +10,6 @@ urlpatterns = [
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('me/', MeView.as_view(), name='me'),
-    path('me/profile/', ProfileUpdateView.as_view(), name='profile_update'),
+    path('me/update/', ProfileUpdateView.as_view(), name='profile_update'),
     path('seller/approve/<int:seller_id>/', ApproveSellerView.as_view(), name='approve_seller'),
 ]

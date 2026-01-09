@@ -6,6 +6,8 @@ from django.db import transaction
 from django.db.models import F , Prefetch
 from celery.result import AsyncResult
 from config.celery import app
+from django.conf import settings
+
 
 from carts.models import Cart
 from products.models import Inventory
@@ -13,15 +15,23 @@ from .models import Order , OrderItem
 from .permissions import IsOwnerOrAdmin
 from .serializers import OrderSerializer , OrderItemSerializer
 from .tasks import send_order_confirmation_email
+from payments.models import Payment
+from django.shortcuts import get_object_or_404
+import razorpay
 
 # Create your views here.
+client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID,settings.RAZORPAY_KEY_SECRET))
+
+
+# Create your views here.
+# This class post method works only for Cart not singular products 
 class PlaceOrderView(APIView):
     permission_classes = [IsAuthenticated]
     
     def post(self , request):
         user = request.user
         cart=getattr(user , 'cart',None)
-        
+        print(cart , user)
         if not cart or not cart.items.exists():
             return Response({"details":"Cart Empty"}, status=status.HTTP_400_BAD_REQUEST)
         
@@ -41,7 +51,9 @@ class PlaceOrderView(APIView):
                     if inv.available() < item.quantity:
                         raise ValueError(f"Insufficient stock for {item.product.title}")
                 
-                order = Order.objects.create(user=user , total_amount=0)
+                
+                order = Order.objects.create(user=user , total_amount=0 , status="processing" )
+                
                 total = 0
                 for item in cart.items.select_related('product'):
                     inv = inv_map[item.product.id]
@@ -64,17 +76,48 @@ class PlaceOrderView(APIView):
                 
                 # Send Confm. here
                 email_response_id=send_order_confirmation_email.delay(email='rroxx460@gmail.com',orderid=order.id)
+                
                 print("email response here: :",email_response_id)
                 # response = AsyncResult(email_response,app=app)
                 # print(response)
+                
+                # payment configuration 
+                payment = Payment.objects.create(
+                    user=request.user,
+                    order=order,
+                    amount=total,
+                    status="unpaid"
+                )
+                
+                
+                order_data = {
+                "amount":int(total*100),
+                "currency":"INR",
+                "payment_capture":"1"
+                }
+                razorpay_order=client.order.create(order_data)
+                order.reference_id = razorpay_order["id"]   
+
+                response = {
+                            "order_id":order.id ,
+                            "reference_id":order.reference_id,
+                            "razorpay_key_id":settings.RAZORPAY_KEY_ID ,
+                            "razorpay_callback_url":settings.RAZORPAY_CALLBACK_URL, 
+                            "total":order.total_amount ,
+                            "email_response_id":email_response_id.id,
+                            "created_at":order.created_at
+                            }
                 order.save()
                 
                 cart.items.all().delete()
                 
+                return Response(response, status= status.HTTP_201_CREATED)
+                
         except ValueError as e:
             return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"order_id":order.id , "total":order.total_amount , "email_response_id":email_response_id.id}, status= status.HTTP_201_CREATED)
-    
+        
+        
+
 
             
 

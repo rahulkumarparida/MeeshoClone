@@ -72,3 +72,4 @@ def send_order_confirmation_email(email , orderid):
     return {'order':'Order sucessfully created!!'}
 
 
+

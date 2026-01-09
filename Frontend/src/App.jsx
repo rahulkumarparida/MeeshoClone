@@ -7,7 +7,10 @@ import Headers from './components/Headers.jsx'
 import ProductsDetailsPage from './components/ProductsDetailsPage.jsx'
 import SearchedPage from './pages/SearchedPage.jsx'
 import ProfilePage from './pages/ProfilePage.jsx'
+import UpdateProfile from "./components/UpdateProfile.jsx"
 import CartPage from './pages/CartPage.jsx'
+import OrderPage from './pages/OrderPage.jsx'
+import OrderHistoryPage from './components/OrderHistoryPage.jsx'
 const App = () => {
   return (
     <div className='min-h-screen'>
@@ -20,11 +23,14 @@ const App = () => {
       <Routes >
         <Route path="/" element={<HomePage />} /> 
         <Route path="/:id" element={<ProductsDetailsPage />} />   
-        <Route path="/cart" element={<CartPage />} />   
         <Route path="/login" element={<Login />} />   
         <Route path="/searchedProducts/:search/" element={<SearchedPage />} />   
         <Route path="/searchedProducts/:search/:id" element={<ProductsDetailsPage />} />     
         <Route path="/profile" element={<ProfilePage />} />     
+        <Route path="/profile/update/" element={<UpdateProfile />} />     
+        <Route path="/cart" element={<CartPage />} />     
+        <Route path="/order" element={<OrderPage />} />     
+        <Route path="/order/history/" element={<OrderHistoryPage />} />     
       </Routes>
       </div>
     </div>

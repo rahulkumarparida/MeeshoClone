@@ -13,13 +13,19 @@ class CartItemSerializer(serializers.ModelSerializer):
         
         
 class CartSerializer(serializers.ModelSerializer):
-    items = CartItemSerializer(many=True)
-    
+    items = CartItemSerializer(many=True , source="items.all", read_only=True)
+    total = serializers.SerializerMethodField()
     class Meta:
         model = Cart
-        fields = ['id','user','items','created_at']
+        fields = ['id','user','items','created_at',"total"]
         read_only_fields = ['user','created_at']
-        
+    
+    def get_total(self ,obj):
+        print(obj.items)
+        total = 0
+        for i in obj.items.all():
+            total += (i.quantity*i.unit_price)
+        return total
 
 class AddToCartSerializer(serializers.Serializer):
     product_id = serializers.IntegerField()

@@ -6,13 +6,14 @@ import Headers from "../components/Headers.jsx"
 import CartProductCard from "../components/elements/CartProductCard.jsx"
 import { reverse } from "lodash"
 import toast , {Toaster} from "react-hot-toast"
-
+import { useNavigate } from "react-router-dom"
 const CartPage = () => {
     const [cartProducts , setCartProducts] = useState(null)
     const [verifyUserValue , setVerifyUserValue] = useState(null)
     const [Total, setTotal] = useState(0)
     const tokens = new LocalStorageManager("tokens")
-    
+    const navigate = useNavigate()
+
     const fetchCartProduct = async () => {
         setVerifyUserValue(await verifyUser(tokens.get()))
         const access = tokens.get().access
@@ -25,11 +26,9 @@ const CartPage = () => {
                 }
             })
             
-            // console.log(response.data.items);
-            const products = reverse(response.data.items)
-            products.map((ele)=>{
-                setTotal(prev => prev+(ele.quantity*ele.unit_price))
-            })
+            console.log(response);
+            const products = response.data.items
+           setTotal(response.data.total)
             setCartProducts(products)
         } catch (error) {
             
@@ -62,12 +61,17 @@ const CartPage = () => {
                 })
             }
         </div>
-        <div className="Total fixed bottom-0 w-full bg-white h-30 border-t flex justify-end items-center font-bold text-gray-600 text-xl">
-            <div className="totalProducts mx-30">
-                Total Products : 
+        <div className="Total fixed bottom-0 w-full bg-white h-30 border-t flex justify-evenly items-center font-bold text-gray-600 text-xl">
+            <div className="totalProducts ">
+                Total Products : {cartProducts.length}
             </div>
-            <div className="total mx-30 mr-40">
+            <div className="total mx-30 ">
                 Total Price :  ₹{Total}
+            </div>
+            <div className="buyNOw text-white bg-pink-500 px-3 py-1 rounded  cursor-pointer "
+            onClick={()=>{navigate("/order")}}
+            >
+                Buy Now
             </div>
         </div>
     </div>

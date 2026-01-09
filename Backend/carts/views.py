@@ -65,6 +65,7 @@ class UpdateCartItemView(generics.UpdateAPIView):
      
      
      
+from rest_framework.exceptions import PermissionDenied
     
 class RemoveCartItemView(generics.DestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -74,16 +75,17 @@ class RemoveCartItemView(generics.DestroyAPIView):
     def get_object(self):
         obj = super().get_object()
         if obj.cart.user != self.request.user:
-            from rest_framework.exceptions import PermissionDenied
             return PermissionDenied()
         return obj
     
     def delete(self, request, *args, **kwargs):
         pk = self.kwargs.get('pk')
         try:
-            item = CartItem.objects.get(pk=pk, cart__user=request.user)
+            item = CartItem.objects.get(id=pk, cart__user=request.user)
+            if not item:
+                return PermissionDenied()
+            item.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
         except CartItem.DoesNotExist:
             return Response({"detail": "Item not found."}, status=status.HTTP_404_NOT_FOUND)
-        item.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
     
