@@ -11,15 +11,16 @@ import UpdateProfile from "./components/UpdateProfile.jsx"
 import CartPage from './pages/CartPage.jsx'
 import OrderPage from './pages/OrderPage.jsx'
 import OrderHistoryPage from './components/OrderHistoryPage.jsx'
+import OrderHistoryDetailsPage from './components/OrderHistoryDetailsPage.jsx'
+import { Toaster } from 'react-hot-toast'
 const App = () => {
   return (
     <div className='min-h-screen'>
       {/* <div className=''>
         <Headers/>
       </div> */}
-      
+      <Toaster/>
       <div > 
-
       <Routes >
         <Route path="/" element={<HomePage />} /> 
         <Route path="/:id" element={<ProductsDetailsPage />} />   
@@ -31,8 +32,10 @@ const App = () => {
         <Route path="/cart" element={<CartPage />} />     
         <Route path="/order" element={<OrderPage />} />     
         <Route path="/order/history/" element={<OrderHistoryPage />} />     
+        <Route path="/order/history/:id" element={<OrderHistoryDetailsPage />} />     
       </Routes>
       </div>
+
     </div>
   )
 }

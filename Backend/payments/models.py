@@ -15,7 +15,7 @@ class Payment(models.Model):
         ('cancelled','Cancelled'),
     ]
     user = models.ForeignKey(User , on_delete=models.CASCADE , related_name="payments")
-    order = models.ForeignKey(Order , on_delete=models.DO_NOTHING , related_name="orders_payment")
+    order = models.ForeignKey(Order , on_delete=models.CASCADE , related_name="orders_payment")
     provider_order_id = models.TextField(null=True , blank=True)
     payment_id = models.TextField(null=True , blank=True)
     signature_id = models.TextField(null=True , blank=True)

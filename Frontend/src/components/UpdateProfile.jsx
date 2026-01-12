@@ -5,7 +5,7 @@ import { verifyUser } from "../services/auth.api";
 import { Camera } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import meeshoLogo from "../assets/meeshoLogo.png";
-import toast , { Toaster } from "react-hot-toast";
+import toast  from "react-hot-toast";
 
 const UpdateProfile = () => {
 //   const [userData, setUserData] = useState(null);
@@ -30,7 +30,7 @@ const UpdateProfile = () => {
   const fetchUserData = async () => {
 
     const access = tokens.access;
-    setVerifyUserValue(await verifyUser(tokens));
+    setVerifyUserValue(await verifyUser());
 
     try {
       const response = await api.get("/users/me/", {
@@ -57,7 +57,7 @@ const UpdateProfile = () => {
   const handleUpdate = async () => {
     
     const access = tokens.access;
-    setVerifyUserValue(await verifyUser(tokens));
+    setVerifyUserValue(await verifyUser());
     const request =   {
     "email": newData.email,
     "first_name": newData.firstName,
@@ -78,8 +78,9 @@ console.log(request);
       
       console.log(response);
       setUserData({firstName:response.data.first_name ,lastName:response.data.last_name , email:response.data.email , phone:response.data.profile.phone , address:response.data.profile.address , avatar: response.data.profile.avatar})
-      if (response.statusText !== "OK") {
-      }
+       if(response.statusText == "Accepted"){
+                location.reload()
+            }
        notify("Picture will be updated once UPDATE is clicked")
 
         
@@ -96,7 +97,7 @@ console.log(request);
     verifyUserValue.valid &&
     userData != null ? (
     <div className="flex flex-col md:flex-row">
-         <Toaster toasterId="updateProfile" position="bottom-right" reverseOrder={false} />
+        
 
       <div className="leftSidebar  border-r border-pink-200  md:h-screen   flex flex-row md:flex-col p-4  md:w-[21%]">
         <span

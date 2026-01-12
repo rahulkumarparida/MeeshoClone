@@ -16,7 +16,7 @@ const ProfilePage = () => {
 
     const fetchUserData = async ()=>{
         const access = tokens.access
-        setVerifyUserValue(await verifyUser(tokens))
+        setVerifyUserValue(await verifyUser())
 
         try {
             const response = await api.get("/users/me/" , {
@@ -26,12 +26,10 @@ const ProfilePage = () => {
             })
 
             console.log(response)
-            if(response.statusText !== "OK"){
-                
-            }
-
+            
             setUserData(response.data)
-
+            
+           
 
         } catch (error) {
             console.error("Error while fetching user's data.")
@@ -57,7 +55,7 @@ return verifyUserValue !== null&& verifyUserValue.valid && userData != null ?
             <span className=" border-2 border-transparent my-3  p-5 text-center  hover:border-pink-400 transition duration-150 cursor-pointer rounded shadow hover:shadow-xl " onClick={()=>{navigate('/cart')}}>
                 Cart
             </span>
-            <span className=" border-2 border-transparent my-3  p-5 text-center  hover:border-pink-400 transition duration-150 cursor-pointer rounded shadow hover:shadow-xl " onClick={()=>{navigate('/')}}>
+            <span className=" border-2 border-transparent my-3  p-5 text-center  hover:border-pink-400 transition duration-150 cursor-pointer rounded shadow hover:shadow-xl " onClick={()=>{navigate('/order/history/')}}>
                 Order History
             </span>
         </div>

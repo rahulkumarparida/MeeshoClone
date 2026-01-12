@@ -1,46 +1,67 @@
 import api from "./api";
+import LocalStorageManager from "../hooks/useLocalStorage";
 
 export const loginUser = (data) => {
   req = {
     email: data.email,
     password: data.password,
   };
-  api.post("/users/login/", req);
+  api.post("/users/login/", req,{
+      headers: {
+        'Content-Type': 'application/json'
+      }
+      
+    });
 };
 
 export const registerUser = (data) => {
-  api.post("/users/register/", data);
+  api.post("/users/register/", data,{
+      headers: {
+        'Content-Type': 'application/json'
+      }
+      
+    });
 };
 
 
 
 
-export const verifyUser = async (data) => {
-  let {refresh, access} = data;
+export const verifyUser = async () => {
+  const data = new LocalStorageManager('tokens')
+  const  access = data.get().access;
+  const refresh = data.get().refresh;
 
   try {
     // First verify the access token
-    let res = await api.post("/users/token/verify/", { "token": access });
-
+    let res = await api.post("/users/token/verify/", JSON.stringify({ "token": access }),{
+      headers: {
+        'Content-Type': 'application/json'
+      }
+      
+    });
     
 
-    if (res.status === 200) {
-      return { valid: true };
-    } else {
+    if (res.statusText !== 'OK') {
       // If access token is invalid, try to refresh
       return await refreshAccessToken(refresh);
     }
+    return { valid: true };
     
   } catch (error) {
     // If verification failed, try to refresh the token
-    console.log("Access token expired or invalid, trying to refresh...");
+    console.error("Access token expired or invalid, trying to refresh...");
     return await refreshAccessToken(refresh);
   }
 };
 
 const refreshAccessToken = async (refreshToken) => {
   try {
-    let resp = await api.post("/users/token/refresh/", { "refresh": refreshToken });
+    let resp = await api.post("/users/token/refresh/", { "refresh": refreshToken },{
+      headers: {
+        'Content-Type': 'application/json'
+      }
+      
+    });
   
     
     if (resp.status === 200 && resp.data.access) {
@@ -60,7 +81,12 @@ const refreshAccessToken = async (refreshToken) => {
       try {
         let verification = await api.post("/users/token/verify/", { 
           "token": resp.data.access 
-        });
+        },{
+      headers: {
+        'Content-Type': 'application/json'
+      }
+      
+    });
         
         if (verification.status === 200) {
           return { valid: true, newTokens: true };

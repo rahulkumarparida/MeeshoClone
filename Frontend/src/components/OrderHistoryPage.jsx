@@ -3,16 +3,22 @@ import api from "../services/api.js"
 import LocalStorageManager from "../hooks/useLocalStorage.js"
 import { verifyUser } from "../services/auth.api.js"
 import Headers from "../components/Headers.jsx"
+import OrderHistoryCard from "./elements/OrderHistoryCard.jsx"
 
 
 const OrderHistoryPage = () => {
 
 const tokens = new LocalStorageManager("tokens")    
+const [verification , setVerification] = useState(null)   
 const [orderHistory ,setOrderHistory] = useState(null)
+
+
+
 // http://127.0.0.1:8000/order/history/
 
 const fetchOrderHistory = async () => {
     const access = tokens.get().access
+    setVerification(await verifyUser())
     try {
 
         let response = await api.get("/order/history/",{
@@ -21,7 +27,7 @@ const fetchOrderHistory = async () => {
             }
         })
 
-        console.log(response)
+        console.log(response.data)
         setOrderHistory(response.data)
 
         
@@ -45,7 +51,17 @@ useEffect(() => {
         <div className="headers">
             <Headers/>
         </div>
-        <div>
+        <div className="p-5">
+            {
+                orderHistory !== null && verification.valid ?
+                orderHistory.map((ele,idx)=>{
+                    return <div key={idx} >
+                        <OrderHistoryCard ele={ele}  />
+                    </div>
+                })
+                :
+                "No History"
+            }
             
         </div>
     </div>

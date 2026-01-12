@@ -5,7 +5,6 @@ import { verifyUser } from "../services/auth.api.js"
 import Headers from "../components/Headers.jsx"
 import CartProductCard from "../components/elements/CartProductCard.jsx"
 import { reverse } from "lodash"
-import toast , {Toaster} from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
 const CartPage = () => {
     const [cartProducts , setCartProducts] = useState(null)
@@ -15,7 +14,7 @@ const CartPage = () => {
     const navigate = useNavigate()
 
     const fetchCartProduct = async () => {
-        setVerifyUserValue(await verifyUser(tokens.get()))
+        setVerifyUserValue(await verifyUser())
         const access = tokens.get().access
 
         try {
@@ -49,7 +48,6 @@ const CartPage = () => {
   return verifyUserValue!==null&& verifyUserValue.valid == true && cartProducts !== null ?
   (
     <div>
-        <Toaster toasterId="productCart" position="top-right" reverseOrder={false} />
         <div className="head">
             <Headers/>
         </div>

@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { ShoppingCart, ChevronsRight, Plus, Minus } from "lucide-react";
 import Headers from "./Headers";
 import LocalStorageManager from "../hooks/useLocalStorage.js";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
+import ReviewAndRating from "./ReviewAndRating.jsx";
 
 const ProductsDetailsPage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -18,10 +19,10 @@ const ProductsDetailsPage = () => {
 
   const fetchProductDetails = async () => {
     try {
-      console.log(slug.id);
+      // console.log(slug.id);
 
       let response = await api.get(`/products/${slug.id}/`);
-      console.log(response);
+      // console.log(response);
 
       setProductsDetails(response.data);
     } catch (error) {
@@ -31,14 +32,14 @@ const ProductsDetailsPage = () => {
 
   const postCartDetails = async (params) => {
     let req = {
-      "product_id": productsDetails.id,
-      "quantity": quantityCount,
+      product_id: productsDetails.id,
+      quantity: quantityCount,
     };
-    
+
     try {
       const tokens = tokenStorage.get();
       const authHead = tokens.access;
-      console.log(req , authHead); 
+      // console.log(req, authHead);
 
       const response = await api.post("cart/add/", req, {
         headers: {
@@ -47,22 +48,21 @@ const ProductsDetailsPage = () => {
       });
 
       if (response.statusText !== "OK") {
-        console.log(true);
-        return errorNotify("Product is out of Stock");  
+        // console.log(true);
+        return errorNotify("Product is out of Stock");
       }
 
       setTimeout(() => {
-        console.log(response);
-        
-       return sucessNotify("Added to cart!!");
+        // console.log(response);
+
+        return sucessNotify("Added to cart!!");
       }, 200);
     } catch (error) {
-      if(error.response.data.non_field_errors[0]){
-
-       return errorNotify("Product is out of Stock"); 
+      if (error.response.data.non_field_errors[0]) {
+        return errorNotify("Product is out of Stock");
       }
       // console.error("error while adding to cart:", error.response.data.non_field_errors[0]);
-     return errorNotify("Error while Fetching the data");  
+      return errorNotify("Error while Fetching the data");
     }
   };
 
@@ -85,9 +85,9 @@ const ProductsDetailsPage = () => {
           <div className="headers">
             <Headers />
           </div>
-          <div className=" text-black     flex ">
-          <Toaster position="top-center" reverseOrder={false} />    
-            <div className="productimgs  flex w-[50%] justify-evenly p-5">
+
+          <div className=" text-black     md:flex ">
+            <div className="productimgs  flex md:w-[50%] justify-evenly p-5">
               <div className="allImages">
                 {productsDetails.images.length == 0
                   ? "No images"
@@ -123,7 +123,7 @@ const ProductsDetailsPage = () => {
                 />
               </div>
             </div>
-            <div className="details  p-5 w-[50%]">
+            <div className="details  p-5 md:w-[50%]">
               <div className="shortinfo flex flex-col">
                 <span className="name text-lg text-gray-500 font-[sans]">
                   {productsDetails.title}
@@ -188,6 +188,15 @@ const ProductsDetailsPage = () => {
                 <p className="pl-3">{productsDetails.description}</p>
               </div>
             </div>
+          </div>
+          
+
+
+
+          {/* Riviews and ratings */}
+
+          <div className="reviewsandratings">
+                  <ReviewAndRating product_id={productsDetails.id} avg_rating={productsDetails.average_rating} />
           </div>
         </div>
       )}

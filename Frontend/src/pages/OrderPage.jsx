@@ -22,7 +22,7 @@ const OrderPage = () => {
 
   // Order from the Cart
    const fetchCartProduct = async () => {
-        setVerifyUserValue(await verifyUser(tokens.get()))
+        setVerifyUserValue(await verifyUser())
         const access = tokens.get().access
 
         try {

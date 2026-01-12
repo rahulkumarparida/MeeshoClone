@@ -30,3 +30,7 @@
 .animate-marquee {
   animation: marquee 30s linear infinite;
 }
+
+.color{
+  background-color: #00fa00af;
+}

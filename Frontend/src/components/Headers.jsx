@@ -86,7 +86,7 @@ const Headers = () => {
   const [suggestions, setSuggestions] = useState([]);
 
   const {tokenStorage} = useAuth();
-  const verifyValue = tokenStorage.exists()?verifyUser(tokenStorage.get()):false
+  const verifyValue = tokenStorage.exists()?verifyUser():false
   const navigate = useNavigate()
   // http://127.0.0.1:8000/products/?search=Camera search query
 
