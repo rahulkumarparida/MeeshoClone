@@ -1,6 +1,6 @@
 from rest_framework import permissions
 from orders.models import OrderItem
-
+from reviews.models import Review
 
 class CanReviewProduct(permissions.BasePermission):
     
@@ -9,6 +9,7 @@ class CanReviewProduct(permissions.BasePermission):
             return True
         user = request.user        
         product_id  = request.data.get('product') or request.parser_context['kwargs'].get('product_pk')
+        
         if not product_id:
             return False
         
