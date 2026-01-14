@@ -10,7 +10,6 @@ export default function Login() {
   const {tokenStorage } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [logMessage , setlogMessage] = useState(null)
   const navigate = useNavigate()
   const notify = (message , color) => toast(message,{style: {"color":color},}); 
 
@@ -50,7 +49,7 @@ export default function Login() {
       setTimeout(() => {
         console.log("TOken",tokenStorage.get().access)
         if (res.ok) {
-        location.replace('/')
+        navigate('/')
       }
       }, 500);
       

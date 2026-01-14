@@ -4,7 +4,7 @@ import LocalStorageManager from "../hooks/useLocalStorage.js"
 import { verifyUser } from "../services/auth.api.js"
 import Headers from "../components/Headers.jsx"
 import CartProductCard from "../components/elements/CartProductCard.jsx"
-import { reverse } from "lodash"
+
 import { useNavigate } from "react-router-dom"
 const CartPage = () => {
     const [cartProducts , setCartProducts] = useState(null)
@@ -52,11 +52,20 @@ const CartPage = () => {
             <Headers/>
         </div>
         <div className="cartProducts p-30 flex flex-col items-center">
-            {
+            {cartProducts.length > 0?
                 cartProducts.map((ele,idx)=>{
 
                     return <CartProductCard ele={ele} key={ele.id} />
                 })
+                :
+                <div className="text-2xl md:text-4xl flex flex-col justify-center items-center text-gray-600">
+                    No Products Added to the cart
+                    <span className="text-lg text-pink-500 hover:text-pink-600 cursor-pointer"
+                    onClick={()=>{navigate("/")}}
+                    >
+                        Add some Products
+                    </span>
+                </div>
             }
         </div>
         <div className="Total fixed bottom-0 w-full bg-white h-30 border-t flex justify-evenly items-center font-bold text-gray-600 text-xl">

@@ -20,3 +20,9 @@ class IsSellerOrReadOnly(permissions.BasePermission):
             return True
         
         return getattr("role", "seller" , None) == request.user 
+    
+class IsSellerOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_authenticated and request.user.role == "seller":
+            return True
+        return False

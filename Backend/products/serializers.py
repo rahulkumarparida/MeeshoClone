@@ -54,8 +54,7 @@ class ProductReadSerializer(serializers.ModelSerializer):
         return obj.reviews.count()
     
     
-    
-    
+
     
 
 class ProductWriteSerializer(serializers.ModelSerializer):
@@ -97,3 +96,13 @@ class InventorySerializer(serializers.ModelSerializer):
         fields = ["product" , "quantity" , "reserved"]
         
     
+
+
+
+
+
+    
+
+
+
+

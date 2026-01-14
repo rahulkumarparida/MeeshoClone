@@ -57,9 +57,11 @@ class PlaceOrderView(APIView):
                 total = 0
                 for item in cart.items.select_related('product'):
                     inv = inv_map[item.product.id]
-                    if order.status == "shipped":
-                            updated = Inventory.objects.filter(pk=inv.pk , quantity__gte=item.quantity).update(quantity=F('quantity')-item.quantity)
-                    updated = Inventory.objects.filter(pk=inv.pk , quantity__gte=item.quantity)   
+                    if  item.quantity > 5 or item.quantity <= 0:
+                        return Response({"details":f"Cannot buy more than 5 of this"},status=status.HTTP_406_NOT_ACCEPTABLE)
+                        
+                    
+                    updated = Inventory.objects.filter(pk=inv.pk , quantity__gte=item.quantity).update(quantity=F('quantity')-item.quantity)   
                     
                     if updated == 0:
                         raise ValueError(f"Insufficient stock (concurrent) for {item.product.title}")
@@ -107,6 +109,7 @@ class PlaceOrderView(APIView):
                             "email_response_id":email_response_id.id,
                             "created_at":order.created_at
                             }
+                
                 order.save()
                 
                 cart.items.all().delete()
@@ -159,6 +162,9 @@ class PlaceOrderUpdateView(APIView):
                         if inv.available() < item.quantity:
                             return Response({"details":f"Insufficient Stock for {item.product.title}"}, status=status.HTTP_400_BAD_REQUEST)
                         
+                        if item.quantity > 5:
+                            return Response({"details":f"Cannot buy more than 5 of this"},status=status.HTTP_406_NOT_ACCEPTABLE)
+                        
                         updated = Inventory.objects.filter(pk=inv.pk , quantity__gte=item.quantity).update(quantity=F('quantity')-item.quantity)
                         
                         if updated == 0:
@@ -205,3 +211,48 @@ class OrderHistoryListView(generics.ListAPIView):
             if user_id:
                 qs.filter(user_id=user_id)
         return qs   
+    
+
+from .serializers import SellerDashboardSerializer
+from products.models import Product
+from django.db.models import Sum, F
+
+
+
+#  Seller's Orders
+class SellerDashboardView(generics.ListAPIView):
+    serializer_class = SellerDashboardSerializer
+    permission_classes = [IsOwnerOrAdmin]
+    
+    def get(self, request, *args, **kwargs):
+        
+        user=request.user
+        
+        if user.role !="seller":
+            
+            return Response({"detail":"You are not authorised to access this endpoint."},status=status.HTTP_403_FORBIDDEN)
+        
+        total_products = Product.objects.filter(seller=user).count()
+        orders = OrderItem.objects.filter(product__seller=user).select_related("order").order_by("order__created_at")
+        print(orders)
+        total_order=orders.count()
+        total_revenue=orders.aggregate(
+            revenue=Sum(F("quantity")*F("unit_price"))
+        )['revenue'] or 0
+            
+        oldest_date = orders.first().order.created_at if total_order else None
+        latest_date = orders.last().order.created_at if total_order else None
+            
+        response = {
+                "user":user.id,
+                "total_products":total_products,
+                "total_order":total_order,
+                "total_revenue":float(total_revenue),
+                "latest_date":latest_date,
+                "oldest_date":oldest_date,
+            }
+        res = self.serializer_class(response).data
+        return Response(res , status=status.HTTP_200_OK)
+
+   
+        

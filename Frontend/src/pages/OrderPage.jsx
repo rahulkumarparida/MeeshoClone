@@ -4,7 +4,7 @@ import LocalStorageManager from "../hooks/useLocalStorage.js"
 import { verifyUser } from "../services/auth.api.js"
 import Headers from "../components/Headers.jsx"
 import CartProductCard from "../components/elements/CartProductCard.jsx"
-import toast , {Toaster} from "react-hot-toast"
+import toast  from "react-hot-toast"
 import { Pencil } from "lucide-react"
 import meeshoLogo from "../assets/meeshoLogo.png"
 import loader from "../assets/loader.gif"
@@ -63,7 +63,9 @@ const handleOrder = async (e) => {
 
       console.log(access);
             
-      let orderResponse = await api.post("/order/place/",{},{
+      let orderResponse = await api.post("/order/place/",
+        {}
+        ,{
         headers:{
           "Authorization":`Bearer  ${access}`
         }
@@ -104,6 +106,9 @@ const handleOrder = async (e) => {
       
     } catch (error) {
       console.error("Error while handling Order Payment", error);
+      if (error.response.status == 406) {
+       return toast.error("Maximum quantity 5") 
+      }
     }
     
     

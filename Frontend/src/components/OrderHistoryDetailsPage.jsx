@@ -80,7 +80,7 @@ const OrderHistoryDetailsPage = () => {
             const dateFromString = new Date(dateString);
 
             setDate(comma(dateFromString.toDateString()))
-
+            // dateStr.toDateString().substring(4).split(" ").join(",")
 
             return sucessNotify("Fetched Order details Successfully")
         }

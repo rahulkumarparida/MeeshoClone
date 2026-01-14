@@ -8,7 +8,8 @@ import meeshoLogo from "../assets/meeshoLogo.png"
 
 const ProfilePage = () => {
     const [userData, setUserData] = useState(null)  
-    const [verifyUserValue , setVerifyUserValue] = useState(null)   
+    const [verifyUserValue , setVerifyUserValue] = useState(null) 
+  
     
     const navigate = useNavigate()
     const tokenStorage = new LocalStorageManager("tokens")
@@ -37,15 +38,26 @@ const ProfilePage = () => {
     }
 
 useEffect(() => {
-  fetchUserData()
+    if(tokens == false){
+        setTimeout(() => {
+        console.log("Loaddeed");
+        navigate("/login")
+    }, 400);
+
+    }else{
+
+        fetchUserData()
+    }   
   
 }, [])
 
 
 return verifyUserValue !== null&& verifyUserValue.valid && userData != null ?
  (
+    
     <div className="flex flex-col md:flex-row">
         <div className="leftSidebar  border-r border-pink-200  md:h-screen   flex flex-row md:flex-col p-4  md:w-[21%]">
+            
             <span className=" border-2 border-transparent my-3  p-5  " onClick={()=>{navigate('/')}}>
                 <img src={meeshoLogo} alt="" />
             </span>
@@ -58,12 +70,22 @@ return verifyUserValue !== null&& verifyUserValue.valid && userData != null ?
             <span className=" border-2 border-transparent my-3  p-5 text-center  hover:border-pink-400 transition duration-150 cursor-pointer rounded shadow hover:shadow-xl " onClick={()=>{navigate('/order/history/')}}>
                 Order History
             </span>
+
+
         </div>
+
+
         <div className="ProfileInfo  p-5   border-r border-pink-200   w-full">
             <div className="pic flex items-center justify-center rounded-[50%]">
-                <img src={userData.profile.avatar} alt="" className="h-60 w-60 object-cover rounded-[50%] " loading="lazy" />
-                {/* <Camera className="text-pink-500 bg-white rounded-4xl h-10 w-10 p-3 border m-[-30px] mt-20 "/> */}
+                <img src={userData.profile.avatar !== null ?userData.profile.avatar:"https://www.freepik.com/free-photos-vectors/blank-profile"} alt="" className="shadow-2xl h-60 w-60 object-cover rounded-[50%] " loading="lazy" />
+               {userData.role =="seller"?
+               <span className="m-[-50px] mt-15 shadow-xl text-white py-2 px-4 rounded  bg-gradient-to-br from-amber-500 via-amber-400 to-yellow-600">
+                Seller
+               </span>
+               :
+               ""}
             </div>
+
             <div className="details  mt-10 p-5 m-7 font-bold flex flex-col ">
                 <span  className="border-l-5  m-2 md:p-3 border-transparent hover:scale-[1.08] text-gray-600 hover:border-pink-300 transition duration-100 ">
                     Name : {userData.first_name+" "+userData.last_name}
@@ -85,12 +107,48 @@ return verifyUserValue !== null&& verifyUserValue.valid && userData != null ?
                     }
                     </code> 
                 </span>
+                {
+                    userData.role == "seller" && userData.seller_profile ?
+                    <div className="  mt-10 p-5  font-bold flex flex-col">
+
+                        <span  className="border-l-5  m-2 md:p-3 border-transparent hover:scale-[1.08] text-gray-600 hover:border-pink-300 transition duration-100 ">
+                        Buissness Name : {userData.seller_profile.business_name}
+                        </span>
+                        <span  className="border-l-5  m-2 md:p-3 border-transparent hover:scale-[1.08] text-gray-600 hover:border-pink-300 transition duration-100 ">
+                            GST No. : {userData.seller_profile.gst_number}
+                        </span >
+                        <span  className="border-l-5  m-2 md:p-3 border-transparent hover:scale-[1.08] text-gray-600 hover:border-pink-300 transition duration-100 ">
+                            Kyc Document : {userData.seller_profile.kyc_document== null?"Not Provided":
+                            <span className="border px-4 py-2 bg-pink-500 font-bold text-white ">Avaliable</span>
+                            }
+                        </span >
+                        
+                        <span  className="border-l-5  m-2 md:p-3 border-transparent hover:scale-[1.08] text-gray-600 hover:border-pink-300 transition duration-100 ">
+                            Started : {userData.seller_profile.submitted_at== null?"Not Provided":
+                            <span className="border px-4 py-2 bg-pink-500 font-bold text-white ">
+                                {userData.seller_profile.submitted_at.slice(0,10)}
+                            </span>
+                            }
+                        </span >
+
+                    </div>
+                    :
+                    ""
+                }
             </div>
+
+            
+
+
         </div>
+
     </div>
+
   )
 :
-"Not Authorized Login Again"
+<div className="text-xl md:text-4xl h-screen flex items-center justify-center text-gray-600 font-bold" >
+    Not Authorized Login Again
+</div>
 
   
 }

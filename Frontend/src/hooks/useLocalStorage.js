@@ -21,7 +21,8 @@ class LocalStorageManager {
     get(){
         const item = localStorage.getItem(this.key)
         if (item == null){
-            throw new Error("No stored keys found")
+            // throw new Error("No stored keys found")
+            return false
         }
         try {
             return JSON.parse(item)

@@ -44,7 +44,7 @@ class ProfileUpdateView(generics.UpdateAPIView):
                     authorized.first_name = data['first_name'] or authorized.first_name
                     authorized.last_name = data['last_name'] or authorized.last_name
                     authorized.save()
-                    profile = Profile.objects.select_for_update().get(user=authorized)
+                    
                     profile.phone = data['phone'] or profile.phone
                     profile.address = data['address'] or profile.address
                     avatar = request.FILES.get('avatar')
@@ -67,7 +67,27 @@ class ProfileUpdateView(generics.UpdateAPIView):
     
     
     def seller_profile_update(self , request , *args , **kwargs):
-        pass
+        try:
+            with transaction.atomic():
+                data = request.data
+                authorized = User.objects.select_for_update().get(id=request.user.id)
+                sellerprofile = SellerProfile.objects.select_for_update().get(user=authorized)
+                if authorized and sellerprofile:
+                    sellerprofile.business_name = data['business_name'] or sellerprofile.business_name
+                    sellerprofile.gst_number = data['gst_number'] or sellerprofile.gst_number
+                    kyc_doc= request.FILES.get("kyc_document") 
+                    if kyc_doc: 
+                        sellerprofile.kyc_document = kyc_doc
+                    
+                    sellerprofile.save()
+                    
+                    self.profile_update(self , request , *args , **kwargs)  
+                    
+        
+        except User.DoesNotExist:
+            
+            return Response({"details":"No user found"}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response({"details":"No user found"}, status=status.HTTP_401_UNAUTHORIZED)
     
     
     def partial_update(self, request, *args, **kwargs):
@@ -82,9 +102,10 @@ class ProfileUpdateView(generics.UpdateAPIView):
                     if authUser.role == "customer":
                 
                         return self.profile_update( request, *args, **kwargs)
+                    
                     if authUser.role == "seller":
-                        self.seller_profile_update(request, *args, **kwargs)
-                        return
+                        return  self.profile_update(request, *args, **kwargs)
+
                 
             
             except User.DoesNotExist :

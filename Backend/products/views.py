@@ -5,7 +5,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Prefetch
 from rest_framework.exceptions import PermissionDenied
 from django.core.cache import cache 
-
+from rest_framework import generics
 
 from .models import Product , ProductImage , Inventory , Category
 from .serializers import ProductReadSerializer , ProductImageSerializer , ProductWriteSerializer , InventorySerializer , CategorySerializer
@@ -135,3 +135,41 @@ class CartegoryViewset(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
     pagination_class = None
     
+    
+    
+from .serializers import  InventorySerializer
+from django.db.models import Count
+from .permissions import IsSellerOnly
+class ProductEnlistedView(generics.ListAPIView):
+    permission_classes=[IsSellerOnly]
+    
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        
+        if user.role !="seller":
+            
+            return Response({"details":"You are not authorised to access this endpoint."},status=status.HTTP_403_FORBIDDEN)
+        
+        products = Product.objects.filter(seller=user).select_related("inventory").annotate(review_count=Count("reviews"))
+        enlisted_array = []
+        for i in products:
+            res={
+                
+                "name": i.title,
+                "slug": i.slug,
+                "inventory":i.inventory.quantity,
+                "avaliable":i.inventory.available(),
+                "reserved": i.inventory.reserved,
+                "review_count":i.review_count,
+                "created_at": i.created_at
+            } 
+           
+            enlisted_array.append(res)
+        
+        
+        return Response(enlisted_array , status=status.HTTP_200_OK)  
+                
+            
+        
+        
+
