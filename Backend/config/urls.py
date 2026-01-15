@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from orders.views import SellerDashboardView
-from products.views import ProductEnlistedView
+from products.views import ProductEnlistedView , ProductEnlistedDetailsView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,6 +33,7 @@ urlpatterns = [
     
     path('seller/dashboard/',SellerDashboardView.as_view(),name="seller-dashboard"),
     path('seller/products/',ProductEnlistedView.as_view(),name="seller-products"),
+    path('seller/products/<int:pk>/',ProductEnlistedDetailsView.as_view(),name="seller-products-details"), 
     
 ]+static(settings.MEDIA_URL , document_root=settings.MEDIA_ROOT)
 

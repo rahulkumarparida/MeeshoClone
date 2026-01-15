@@ -154,7 +154,7 @@ class ProductEnlistedView(generics.ListAPIView):
         enlisted_array = []
         for i in products:
             res={
-                
+                "id":i.id,
                 "name": i.title,
                 "slug": i.slug,
                 "inventory":i.inventory.quantity,
@@ -169,7 +169,63 @@ class ProductEnlistedView(generics.ListAPIView):
         
         return Response(enlisted_array , status=status.HTTP_200_OK)  
                 
+from django.shortcuts import get_object_or_404       
+from reviews.models import Review   
+from reviews.serializers import ReviewSerializer
+from orders.models import Order , OrderItem
+from orders.serializers import OrderItemSerializer
+from payments.models import Payment
+
+class ProductEnlistedDetailsView(generics.RetrieveAPIView):
+    permission_classes = [IsSellerOnly]
+    
+    def get(self, request, pk,*args, **kwargs):
+        user = request.user
+        
+        if user.role != "seller":
+            return Response({"details":"You are not authorised to access this endpoint."},status=status.HTTP_403_FORBIDDEN)
+        
+        product = get_object_or_404(Product , seller=request.user , id=pk)
+        if product:
+            inventory = Inventory.objects.get(product=product)
+            reviews = Review.objects.filter(product=product)
+            order_items = OrderItem.objects.filter(product=product)
             
+            
+            orders=[]
+            for items in order_items:
+                order_id = items.order
+                try:
+                    payment = Payment.objects.get(order=order_id)
+                    
+                    res = {
+                        "status":order_id.status,
+                        "payment_status":payment.status,
+                        "amount":(float(items.quantity)*float(items.unit_price)),
+                        "paid_at":payment.updated_at
+                    }
+                    orders.append(res)
+                except Payment.DoesNotExist:
+                    
+                    res={
+                        "status":order_id.status,
+                        "amount":(float(items.quantity)*float(items.unit_price)),
+                        "created_at":order_id.created_at
+                    }
+                    orders.append(res)
+                    
+                    
+  
+            response = {
+                "email":product.seller.email,
+                "inventory":InventorySerializer(inventory).data,
+                "reviews":ReviewSerializer(reviews,many=True).data,
+                "orders":orders  
+            }
+                
+            return Response(response , status=status.HTTP_200_OK)
+        
+        
         
         
 

@@ -9,7 +9,7 @@ import { Pencil } from "lucide-react"
 import meeshoLogo from "../assets/meeshoLogo.png"
 import loader from "../assets/loader.gif"
 import { useRazorpay, RazorpayOrderOptions } from "react-razorpay";
-
+import { useNavigate } from "react-router-dom"
 
 const OrderPage = () => {
   const tokens = new LocalStorageManager("tokens") 
@@ -19,7 +19,7 @@ const OrderPage = () => {
   const [userData , setUserData]= useState(null)
   const [loading,setLoading] = useState(false)
   const { error, isLoading, Razorpay } = useRazorpay(); 
-
+  const navigate = useNavigate()
   // Order from the Cart
    const fetchCartProduct = async () => {
         setVerifyUserValue(await verifyUser())
@@ -108,6 +108,9 @@ const handleOrder = async (e) => {
       console.error("Error while handling Order Payment", error);
       if (error.response.status == 406) {
        return toast.error("Maximum quantity 5") 
+      }
+      if(error.response.status == 400){
+        navigate("/cart")
       }
     }
     

@@ -31,7 +31,7 @@ class PlaceOrderView(APIView):
     def post(self , request):
         user = request.user
         cart=getattr(user , 'cart',None)
-        print(cart , user)
+        
         if not cart or not cart.items.exists():
             return Response({"details":"Cart Empty"}, status=status.HTTP_400_BAD_REQUEST)
         
@@ -76,12 +76,7 @@ class PlaceOrderView(APIView):
                 
                 order.total_amount = total
                 
-                # Send Confm. here
-                email_response_id=send_order_confirmation_email.delay(email='rroxx460@gmail.com',orderid=order.id)
-                
-                print("email response here: :",email_response_id)
-                # response = AsyncResult(email_response,app=app)
-                # print(response)
+               
                 
                 # payment configuration 
                 payment = Payment.objects.create(
@@ -106,13 +101,12 @@ class PlaceOrderView(APIView):
                             "razorpay_key_id":settings.RAZORPAY_KEY_ID ,
                             "razorpay_callback_url":settings.RAZORPAY_CALLBACK_URL, 
                             "total":order.total_amount ,
-                            "email_response_id":email_response_id.id,
+                            "email_response_id":request.user.id,
                             "created_at":order.created_at
                             }
                 
                 order.save()
-                
-                cart.items.all().delete()
+                payment.save()
                 
                 return Response(response, status= status.HTTP_201_CREATED)
                 
