@@ -228,14 +228,21 @@ class SellerDashboardView(generics.ListAPIView):
         
         total_products = Product.objects.filter(seller=user).count()
         orders = OrderItem.objects.filter(product__seller=user).select_related("order").order_by("order__created_at")
-        print(orders)
-        total_order=orders.count()
+        
+        total_order=[]
+        for items in orders:
+            res={
+                "created_at":items.order.created_at,
+                "amount":items.order.total_amount
+            }
+            total_order.append(res)
+            
         total_revenue=orders.aggregate(
             revenue=Sum(F("quantity")*F("unit_price"))
         )['revenue'] or 0
             
-        oldest_date = orders.first().order.created_at if total_order else None
-        latest_date = orders.last().order.created_at if total_order else None
+        oldest_date = orders.first().order.created_at if len(total_order) else None
+        latest_date = orders.last().order.created_at if len(total_order) else None
             
         response = {
                 "user":user.id,

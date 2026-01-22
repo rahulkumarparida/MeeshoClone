@@ -159,7 +159,7 @@ const ProductsDetailsPage = () => {
                 <div
                   onClick={() => {
                     SetQuantityCount((prev) => prev + 1);
-                    console.log("Click hela re");
+                    
                   }}
                 >
                   <Plus className=" rounded-[50%] mx-2 h-7 w-7 shadow text-pink-500 hover:text-pink-700 hover:shadow-3xl border-2 border-pink-200" />

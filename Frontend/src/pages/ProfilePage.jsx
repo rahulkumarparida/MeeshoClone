@@ -61,15 +61,25 @@ return verifyUserValue !== null&& verifyUserValue.valid && userData != null ?
             <span className=" border-2 border-transparent my-3  p-5  " onClick={()=>{navigate('/')}}>
                 <img src={meeshoLogo} alt="" />
             </span>
-            <span className=" border-2 border-transparent my-3  p-5 text-center  hover:border-pink-400 transition duration-150 cursor-pointer rounded shadow hover:shadow-xl"  onClick={()=>{navigate('/profile/update')}} >
+            <span className=" border-2 border-transparent my-3  p-5 text-center  hover:border-pink-400 hover:bg-pink-500  hover:text-white transition duration-150 cursor-pointer rounded shadow hover:shadow-xl"  onClick={()=>{navigate('/profile/update')}} >
                 Update Profile
             </span>
-            <span className=" border-2 border-transparent my-3  p-5 text-center  hover:border-pink-400 transition duration-150 cursor-pointer rounded shadow hover:shadow-xl " onClick={()=>{navigate('/cart')}}>
+            <span className=" border-2 border-transparent my-3  p-5 text-center  hover:border-pink-400 hover:bg-pink-500  hover:text-white transition duration-150 cursor-pointer rounded shadow hover:shadow-xl " onClick={()=>{navigate('/cart')}}>
                 Cart
             </span>
-            <span className=" border-2 border-transparent my-3  p-5 text-center  hover:border-pink-400 transition duration-150 cursor-pointer rounded shadow hover:shadow-xl " onClick={()=>{navigate('/order/history/')}}>
+            <span className=" border-2 border-transparent my-3  p-5 text-center  hover:border-pink-400 hover:bg-pink-500  hover:text-white transition duration-150 cursor-pointer rounded shadow hover:shadow-xl " onClick={()=>{navigate('/order/history/')}}>
                 Order History
             </span>
+
+            {
+                userData.role =="seller"?
+                
+                    <span className=" border-2 border-transparent my-3  p-5 text-center  hover:border-pink-400 hover:bg-pink-500  hover:text-white transition duration-150 cursor-pointer rounded shadow hover:shadow-xl " onClick={()=>{navigate('/seller/dashboard/')}}>
+                         Seller Dashboard
+                    </span>
+            
+                :""
+            }
 
 
         </div>

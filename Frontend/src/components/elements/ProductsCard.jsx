@@ -7,7 +7,7 @@ const ProductsCard = ({ele , onClick}) => {
 
   return (
 
-    <div className='m-4 p-4 border border-pink-400 rounded-xl shadow-lg w-fit hover:shadow-2xl transition duration-300 delay-60 flex flex-col justify-center items-center lg:w-60 cursor-pointer' title={ele.title} onClick={onClick} >
+    <div className='m-4 p-4   rounded-xl shadow-lg hover:shadow-2xl w-fit hover:shadow-2xl transition duration-100 delay-60 flex flex-col justify-center items-center lg:w-60 cursor-pointer' title={ele.title} onClick={onClick} >
       
        <div className="img">
         <img src={ele.images[0].image_url} alt="img" className='object-cover h-40' />

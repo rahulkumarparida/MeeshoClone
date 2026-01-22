@@ -70,21 +70,24 @@ class ProductWriteSerializer(serializers.ModelSerializer):
         images = validated_data.pop('images',[])
         seller = self.context['request'].user
         product = Product.objects.create(seller=seller,**validated_data)
+        
+        
         for img in images:
-            Product.objects.create(product=product , image=img)
+            ProductImage.objects.create(product=product , image=img)
             
         return product
     
     
     def update(self, instance, validated_data):
+        print("Came till serializer")
         images = validated_data.pop("images",None)
         for attr , val in validated_data.items():
             setattr(instance,attr , val)
         instance.save()
         if images is not None:
-            instance.images.all().delete()
+            
             for img in images:
-                Product.objects.create(product=instance , images=img)
+                ProductImage.objects.create(product=instance , images=img)
         return  instance
     
     

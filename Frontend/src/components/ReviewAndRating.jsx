@@ -260,7 +260,7 @@ const handleReview = ()=>{
   ) : (
     <div className="border p-3 px-8 mt-5 ">
       <div className="head">
-        <span className="text-3xl font-bold">Ratingssss and reviews</span>
+        <span className="text-3xl font-bold">Ratings and reviews</span>
         <span className="flex mt-3">
           <p className="text-xl mr-1">5</p> <Star className="text-green-700" />
           <span></span>

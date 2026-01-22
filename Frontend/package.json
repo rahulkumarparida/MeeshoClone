@@ -10,8 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@fortawesome/fontawesome-svg-core": "^7.1.0",
     "@fortawesome/react-fontawesome": "^3.1.1",
+    "@mui/material": "^7.3.7",
+    "@mui/x-charts": "^8.25.0",
     "@tailwindcss/vite": "^4.1.18",
     "axios": "^1.13.2",
     "fa-icons": "^0.2.0",

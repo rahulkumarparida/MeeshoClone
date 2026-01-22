@@ -13,10 +13,12 @@ import OrderPage from './pages/OrderPage.jsx'
 import OrderHistoryPage from './components/OrderHistoryPage.jsx'
 import OrderHistoryDetailsPage from './components/OrderHistoryDetailsPage.jsx'
 import SellerDashboardPage from './pages/SellerDashboardPage.jsx'
+import ProductEnlnistedPage from './components/ProductEnlnistedPage.jsx'
+import SellerAddProductPage from './pages/SellerAddProductPage.jsx'
 import { Toaster } from 'react-hot-toast'
 const App = () => {
   return (
-    <div className='min-h-screen'>
+    <div className='min-h-screen cursor-default'>
       {/* <div className=''>
         <Headers/>
       </div> */}
@@ -35,6 +37,8 @@ const App = () => {
         <Route path="/order/history/" element={<OrderHistoryPage />} />     
         <Route path="/order/history/:id" element={<OrderHistoryDetailsPage />} />      
         <Route path="/seller/dashboard/" element={<SellerDashboardPage />} />      
+        <Route path="/seller/products/" element={<ProductEnlnistedPage />} />      
+        <Route path="/seller/products/add/" element={<SellerAddProductPage />} />      
       </Routes>
       </div>
 

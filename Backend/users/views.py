@@ -141,3 +141,16 @@ class ApproveSellerView(APIView):
             return Response({"detail":"approved"}, status=status.HTTP_200_OK)
         except SellerProfile.DoesNotExist:
             return Response({"detail":"not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+# Required for the frontend to ensure that seller is only accessing the seller based pages
+from products.permissions import IsSellerOnly
+class RoleViewset(APIView):
+    permission_classes=[IsSellerOnly]
+    
+    def get(self , request , *args , **kwargs):
+        
+        if request.user.is_authenticated and request.user.role == "seller":
+            
+            return Response({"status": True},status=status.HTTP_200_OK)
+        return Response({"status": False},status=status.HTTP_401_UNAUTHORIZED)

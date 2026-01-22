@@ -25,7 +25,7 @@ from products.models import Product
 
 class SellerDashboardSerializer(serializers.Serializer):
     total_products = serializers.IntegerField()
-    total_order=serializers.IntegerField()
+    total_order=serializers.ListField()
     total_revenue = serializers.FloatField()
     oldest_date = serializers.DateTimeField()
     latest_date = serializers.DateTimeField()

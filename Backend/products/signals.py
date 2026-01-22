@@ -7,7 +7,7 @@ import cloudinary.uploader
 @receiver(post_save  , sender=Product)
 def create_inventory(sender , instance , created , **kwargs):
     if created:
-        Inventory.objects.create(product=instance)
+        Inventory.objects.create(product=instance , quantity=200, reserved=75)
 
 
 @receiver(post_delete , sender=ProductImage)

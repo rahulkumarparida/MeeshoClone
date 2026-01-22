@@ -14,6 +14,7 @@ from .permissions import IsSellerOrReadOnly
 
 # Create your views here.
 class ProductViewset(viewsets.ModelViewSet):
+    
     queryset = Product.objects.all().select_related('category').prefetch_related('images')
     permission_classes = [IsSellerOrReadOnly]
     filter_backends = [DjangoFilterBackend , filters.SearchFilter , filters.OrderingFilter ]
@@ -36,6 +37,19 @@ class ProductViewset(viewsets.ModelViewSet):
             return ProductReadSerializer
         return ProductWriteSerializer
     
+    
+    
+    def create(self, request, *args, **kwargs):
+        user = request.user
+        if not user.is_authenticated and user.role != "seller":
+            
+            raise PermissionDenied("Only Seller can create products") 
+        
+        
+        
+        
+        return super().create(request, *args, **kwargs)
+    
     def perform_create(self, serializer):
         user = self.request.user
         if not user.is_authenticated and user.role != "seller":
@@ -43,6 +57,9 @@ class ProductViewset(viewsets.ModelViewSet):
             raise PermissionDenied("Only Seller can create products") 
         cache.delete("products") 
         serializer.save()
+        
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
     
     def perform_update(self, serializer):
         cache.delete("products") 
@@ -50,7 +67,6 @@ class ProductViewset(viewsets.ModelViewSet):
     
     def get_queryset(self):
         qs = super().get_queryset()
-        print(qs[0])
         return qs
 
     def list(self, request, *args, **kwargs):
@@ -153,6 +169,12 @@ class ProductEnlistedView(generics.ListAPIView):
         products = Product.objects.filter(seller=user).select_related("inventory").annotate(review_count=Count("reviews"))
         enlisted_array = []
         for i in products:
+            img_obj = ProductImage.objects.filter(product=i).first()
+
+            if img_obj:
+                product_image = img_obj.image.url
+            else:
+                product_image = None
             res={
                 "id":i.id,
                 "name": i.title,
@@ -161,7 +183,8 @@ class ProductEnlistedView(generics.ListAPIView):
                 "avaliable":i.inventory.available(),
                 "reserved": i.inventory.reserved,
                 "review_count":i.review_count,
-                "created_at": i.created_at
+                "created_at": i.created_at,
+                "product_image":product_image
             } 
            
             enlisted_array.append(res)
