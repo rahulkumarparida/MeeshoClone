@@ -4,8 +4,7 @@ import LocalStorageManager from "../hooks/useLocalStorage";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import meeshoLogo from "../assets/meeshoLogo.png";
-import { Link } from "react-router-dom";
+
 import { useNavigate } from "react-router-dom";
 import Headers from "../components/Headers";
 

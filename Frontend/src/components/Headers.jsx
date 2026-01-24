@@ -183,7 +183,7 @@ function handleSearch(event){
               <div className='flex items-center p-2' >
               <Link to='/login'  className='hover:underline   cursor-pointer'>Login</Link> 
               <div className='mx-2'>/</div> 
-              <Link to='/signup' className='hover:underline   cursor-pointer'>Signup</Link>  
+              <Link to='/register' className='hover:underline   cursor-pointer'>Signup</Link>  
               
               </div>
             }
