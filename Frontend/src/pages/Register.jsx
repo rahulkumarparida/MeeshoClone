@@ -2,6 +2,9 @@ import { useState } from "react";
 import api from "../services/api";
 import { useNavigate } from "react-router-dom";
 export default function Register() {
+  const [showPass1, setShowPass1] = useState(false);
+const [showPass2, setShowPass2] = useState(false);
+
   const [step, setStep] = useState(1);
   const [error, setError] = useState("");
     const navigate = useNavigate()
@@ -132,21 +135,44 @@ export default function Register() {
           <option value="seller">Seller</option>
         </select>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          className="w-full border border-gray-300 rounded-lg px-4 py-3 mb-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
-          onChange={handleChange}
-        />
+<div className="relative mb-3">
+  <input
+    type={showPass1 ? "text" : "password"}
+    name="password"
+    placeholder="Password"
+    className="w-full border border-gray-300 rounded-lg px-4 py-3 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
+    onChange={handleChange}
+  />
 
-        <input
-          type="password"
-          name="password2"
-          placeholder="Confirm Password"
-          className="w-full border border-gray-300 rounded-lg px-4 py-3 mb-4 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
-          onChange={handleChange}
-        />
+  <button
+    type="button"
+    onClick={() => setShowPass1(!showPass1)}
+    className="cursor:pointer absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-500"
+  >
+    {showPass1 ? "Hide" : "Show"}
+  </button>
+</div>
+
+
+<div className="relative mb-4">
+  <input
+    type={showPass2 ? "text" : "password"}
+    name="password2"
+    placeholder="Confirm Password"
+    className="w-full border border-gray-300 rounded-lg px-4 py-3 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
+    onChange={handleChange}
+  />
+
+  <button
+    type="button"
+    onClick={() => setShowPass2(!showPass2)}
+    className="cursor:pointer absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-500"
+  >
+    {showPass2 ? "Hide" : "Show"}
+  </button>
+</div>
+
+
 
         <button
           onClick={handleNext}

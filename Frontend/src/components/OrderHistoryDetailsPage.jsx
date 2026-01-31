@@ -17,7 +17,7 @@ const ProductsList = ({items})=>{
 
     // console.log(items);
     
-return <div className=" p-2 flex items-center justify-between px-8 cursor-pointer" onClick={()=>{navigate(`/${items.product.slug}`)}}>
+return <div className=" p-2 flex items-center justify-between px-8 cursor-pointer" onClick={()=>{navigate(`/product/${items.product.slug}`)}}>
         <div className="img">
         <img src={items.product.images[0].image_url} alt="img" className='object-cover h-8 sm:h-10 md:h-30' />
        </div>

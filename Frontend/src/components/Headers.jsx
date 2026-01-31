@@ -64,7 +64,7 @@ const Headers = () => {
                   {activeMenuName}
                 </span>
                 {activeCategory.children.map((ele) => (
-                  <span key={ele.id} className="text-gray-800 font-semibold max-w-fit hover:text-pink-700 cursor-pointer m-2 my-3 transition duration-300 ">
+                  <span key={ele.id} className="text-gray-800 font-semibold max-w-fit hover:text-pink-700 cursor-pointer m-2 my-3 transition duration-300 " onClick={()=>{}} >
 
                     {ele.name}
                     <br />
@@ -158,7 +158,7 @@ function handleSearch(event){
               <ul  className={'w-full mt-3 '}>
               {suggestions.length > 0?
               suggestions.map((ele)=>{
-                 return <li className='my-1 px-4 py-1 z-30 flex border-b border-gray-400 w-full hover:bg-pink-100 cursor-pointer' key={ele.id} value={ele.slug}>
+                 return <li className='my-1 px-4 py-1 z-30 flex border-b border-gray-400 w-full hover:bg-pink-100 cursor-pointer' key={ele.id} value={ele.slug} onClick={()=>{navigate(`/product/${ele.slug}`)}} >
                   <img src={ele.images[0].image_url} alt="" className='h-10' />
                   <p className='mx-3' title={ele.title}>{ele.title.slice(0,60)}</p>
                   </li> 

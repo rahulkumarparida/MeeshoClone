@@ -33,7 +33,7 @@ urlpatterns = [
     
     path('seller/dashboard/',SellerDashboardView.as_view(),name="seller-dashboard"),
     path('seller/products/',ProductEnlistedView.as_view(),name="seller-products"),
-    path('seller/products/<int:pk>/',ProductEnlistedDetailsView.as_view(),name="seller-products-details"), 
+    path('seller/products/<str:slug>/',ProductEnlistedDetailsView.as_view(),name="seller-products-details"), 
     
 ]+static(settings.MEDIA_URL , document_root=settings.MEDIA_ROOT)
 

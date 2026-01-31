@@ -15,7 +15,7 @@ const ProductEnlistedCard = ({items}) => {
             <img src={items.product_image} alt="" className='h-25 object-cover' />
         </div>
         <div className="name m-2 p-2 text-center w-[45%] font-semibold  bg-pink-200 text-pink-700 rounded cursor-pointer" 
-        onClick={(e)=>{navigate(`/${items.slug}`)}} title="Navigates to the product page" >
+        onClick={(e)=>{navigate(`/product/${items.slug}`)}} title="Navigates to the product page" >
             <p>{items.name}</p>
             
         </div>
@@ -46,7 +46,7 @@ const ProductEnlistedCard = ({items}) => {
         </div>
 
         <div className="detailbutton flex m-5  items-center justify-center">
-            <span className='m-2 px-4 hover:border border-pink-800 hover:bg-pink-600 hover:text-white font-semibold  p-2 rounded shadow-xl cursor-pointer transition duration-150'>
+            <span className='m-2 px-4 hover:border border-pink-800 hover:bg-pink-600 hover:text-white font-semibold  p-2 rounded shadow-xl cursor-pointer transition duration-150' onClick={()=>{navigate(`/seller/products/${items.slug}`)}}>
                 Details
             </span>
         </div>

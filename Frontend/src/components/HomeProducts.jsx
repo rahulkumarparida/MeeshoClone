@@ -91,7 +91,7 @@ const handleProductClick = (slug)=> {
   console.log("reached",slug);
   
 
-  navigate(`/${slug}`)
+  navigate(`/product/${slug}`)
   
 }
 

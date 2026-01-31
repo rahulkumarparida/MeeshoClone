@@ -1,4 +1,3 @@
-import React from 'react'
 import { useParams } from 'react-router-dom'
 import Headers from '../components/Headers'
 import api from '../services/api.js'
@@ -37,7 +36,7 @@ const handleProductClick = (slug)=> {
   console.log("reached",slug);
   
 
-  navigate(`/${slug}`)
+  navigate(`/product/${slug}`)
   
 }
 

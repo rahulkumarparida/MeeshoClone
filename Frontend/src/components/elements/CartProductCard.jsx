@@ -13,7 +13,7 @@ const CartProductCard = ({ele}) => {
 
 const goToProduct = (slug)=>{
     
-    navigate(`/${slug}`)
+    navigate(`/product/${slug}`)
 }
 
 // http://127.0.0.1:8000/cart/update/42/ -- patch

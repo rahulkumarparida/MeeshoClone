@@ -37,6 +37,16 @@ const ProfilePage = () => {
         }
     }
 
+
+    const handleLogout = ()=>{
+        console.log("Faaaa");
+        
+        tokenStorage.delete()
+        setTimeout(() => {
+            navigate("/login")
+        }, 2000);
+    }
+
 useEffect(() => {
     if(tokens == false){
         setTimeout(() => {
@@ -86,7 +96,7 @@ return verifyUserValue !== null&& verifyUserValue.valid && userData != null ?
 
 
         <div className="ProfileInfo  p-5   border-r border-pink-200   w-full">
-            <div className="pic flex items-center justify-center rounded-[50%]">
+            <div className="pic flex items-start justify-center rounded-[50%]">
                 <img src={userData.profile.avatar !== null ?userData.profile.avatar:"https://www.freepik.com/free-photos-vectors/blank-profile"} alt="" className="shadow-2xl h-60 w-60 object-cover rounded-[50%] " loading="lazy" />
                {userData.role =="seller"?
                <span className="m-[-50px] mt-15 shadow-xl text-white py-2 px-4 rounded  bg-gradient-to-br from-amber-500 via-amber-400 to-yellow-600">
@@ -94,6 +104,7 @@ return verifyUserValue !== null&& verifyUserValue.valid && userData != null ?
                </span>
                :
                ""}
+               
             </div>
 
             <div className="details  mt-10 p-5 m-7 font-bold flex flex-col ">
@@ -140,11 +151,13 @@ return verifyUserValue !== null&& verifyUserValue.valid && userData != null ?
                             </span>
                             }
                         </span >
+                        
 
                     </div>
                     :
                     ""
                 }
+                <span className="max-w-fit border cursor-pointer mx-5 my-2 p-3 rounded bg-pink-500 text-gray-200 hover:bg-pink-600 hover:text-white hover:scale-[0.8] transition duration-100" onClick={()=>{handleLogout()}}>Logout</span>
             </div>
 
             

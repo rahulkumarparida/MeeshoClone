@@ -14,7 +14,7 @@ from .permissions import IsSellerOrReadOnly
 
 # Create your views here.
 class ProductViewset(viewsets.ModelViewSet):
-    
+                                
     queryset = Product.objects.all().select_related('category').prefetch_related('images')
     permission_classes = [IsSellerOrReadOnly]
     filter_backends = [DjangoFilterBackend , filters.SearchFilter , filters.OrderingFilter ]
@@ -202,28 +202,31 @@ from payments.models import Payment
 class ProductEnlistedDetailsView(generics.RetrieveAPIView):
     permission_classes = [IsSellerOnly]
     
-    def get(self, request, pk,*args, **kwargs):
+    def get(self, request, slug,*args, **kwargs):
         user = request.user
         
         if user.role != "seller":
             return Response({"details":"You are not authorised to access this endpoint."},status=status.HTTP_403_FORBIDDEN)
         
-        product = get_object_or_404(Product , seller=request.user , id=pk)
+        product = get_object_or_404(Product , seller=request.user , slug=slug)
         if product:
             inventory = Inventory.objects.get(product=product)
             reviews = Review.objects.filter(product=product)
             order_items = OrderItem.objects.filter(product=product)
             
-            
+            total_order_qunatity=0
             orders=[]
             for items in order_items:
                 order_id = items.order
+                total_order_qunatity += items.quantity
                 try:
                     payment = Payment.objects.get(order=order_id)
                     
                     res = {
+                        "name":items.product.title,
                         "status":order_id.status,
                         "payment_status":payment.status,
+                        "quantity":items.quantity,
                         "amount":(float(items.quantity)*float(items.unit_price)),
                         "paid_at":payment.updated_at
                     }
@@ -231,7 +234,9 @@ class ProductEnlistedDetailsView(generics.RetrieveAPIView):
                 except Payment.DoesNotExist:
                     
                     res={
+                        "name":items.product.title,
                         "status":order_id.status,
+                        "quantity":items.quantity,
                         "amount":(float(items.quantity)*float(items.unit_price)),
                         "created_at":order_id.created_at
                     }
@@ -243,12 +248,13 @@ class ProductEnlistedDetailsView(generics.RetrieveAPIView):
                 "email":product.seller.email,
                 "inventory":InventorySerializer(inventory).data,
                 "reviews":ReviewSerializer(reviews,many=True).data,
-                "orders":orders  
+                "orders":orders ,
+                "total_ordered":total_order_qunatity
             }
                 
             return Response(response , status=status.HTTP_200_OK)
         
-        
+
         
         
 

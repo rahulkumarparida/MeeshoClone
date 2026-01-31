@@ -17,7 +17,8 @@ import OrderHistoryDetailsPage from './components/OrderHistoryDetailsPage.jsx'
 import SellerDashboardPage from './pages/SellerDashboardPage.jsx'
 import ProductEnlnistedPage from './components/ProductEnlnistedPage.jsx'
 import SellerAddProductPage from './pages/SellerAddProductPage.jsx'
-
+import SellerProductDetails from './components/SellerProductDetails.jsx'
+import Error404Page from './pages/Error404Page.jsx'
 import { Toaster } from 'react-hot-toast'
 const App = () => {
   return (
@@ -27,7 +28,7 @@ const App = () => {
       <div > 
       <Routes >
         <Route path="/" element={<HomePage />} /> 
-        <Route path="/:id" element={<ProductsDetailsPage />} />   
+        <Route path="/product/:id" element={<ProductsDetailsPage />} />   
         <Route path="/login" element={<Login />} />   
         <Route path="/register" element={<Register />} />   
         <Route path="/searchedProducts/:search/" element={<SearchedPage />} />   
@@ -40,7 +41,9 @@ const App = () => {
         <Route path="/order/history/:id" element={<OrderHistoryDetailsPage />} />      
         <Route path="/seller/dashboard/" element={<SellerDashboardPage />} />      
         <Route path="/seller/products/" element={<ProductEnlnistedPage />} />      
-        <Route path="/seller/products/add/" element={<SellerAddProductPage />} />      
+        <Route path="/seller/products/:id" element={<SellerProductDetails />} />      
+        <Route path="/seller/products/add/" element={<SellerAddProductPage />} /> 
+        <Route path="*" element={<Error404Page />} />     
       </Routes>
       </div>
 
