@@ -25,7 +25,6 @@ const CartPage = () => {
                 }
             })
             
-            console.log(response);
             const products = response.data.items
            setTotal(response.data.total)
             setCartProducts(products)

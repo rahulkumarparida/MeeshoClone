@@ -17,7 +17,6 @@ const fetchFilteredData = async (selected) => {
       let url =`/products/?${selected.value}`
       let response =await api.get(url)
 
-      console.log(response);
 
       setProducts([...response.data.results])
 

@@ -41,7 +41,7 @@ const ReviewAndRating = ({ product_id, avg_rating }) => {
   
   
   const ReviewCard = ({ review }) => {
-      // console.log(review);
+ 
       
       return (
           <div className="m-3 p-3 border rounded border-gray-400 shadow">
@@ -60,7 +60,6 @@ const ReviewAndRating = ({ product_id, avg_rating }) => {
     try {
       let response = await api.get(`/reviews/${product_id}/`);
 
-      // console.log(response);
       if (response.statusText == "OK") {
         setdetails(response.data);
       }
@@ -90,7 +89,6 @@ const ReviewAndRating = ({ product_id, avg_rating }) => {
               Authorization: `Bearer ${access}`,
               },
           });
-          console.log(response);
   
           if ((response.status = 201)) {
             setTimeout(() => {
@@ -162,7 +160,6 @@ const handleReview = ()=>{
                         alt=""
                         className="h-9 w-9"
                         onClick={(e) => {
-                          console.log(e.target);
                           setRatingCount(
                             ratingCount + index <= 5
                               ? ratingCount + index + 1
@@ -184,7 +181,6 @@ const handleReview = ()=>{
                         alt=""
                         className="h-9 w-9"
                         onClick={(e) => {
-                          console.log(e.target);
                           setRatingCount(index + 1);
                         }}
                       />
@@ -199,7 +195,6 @@ const handleReview = ()=>{
                         alt=""
                         className="h-9 w-9"
                         onClick={(e) => {
-                          console.log(e.target);
                           setRatingCount(
                             ratingCount + index <= 5
                               ? ratingCount + index + 1
@@ -238,7 +233,6 @@ const handleReview = ()=>{
               className=" border px-5 py-2 rounded bg-pink-600 hover:bg-pink-700 text-white"
               disabled={review.length === 0}
               onClick={() => {
-                console.log("Clicked");
                 handleReview()
               }}
             >
@@ -285,7 +279,6 @@ const handleReview = ()=>{
                         alt=""
                         className="h-9 w-9"
                         onClick={(e) => {
-                          console.log(e.target);
                           setRatingCount(
                             ratingCount + index <= 5
                               ? ratingCount + index + 1
@@ -307,7 +300,6 @@ const handleReview = ()=>{
                         alt=""
                         className="h-9 w-9"
                         onClick={(e) => {
-                          console.log(e.target);
                           setRatingCount(index + 1);
                         }}
                       />
@@ -322,7 +314,6 @@ const handleReview = ()=>{
                         alt=""
                         className="h-9 w-9"
                         onClick={(e) => {
-                          console.log(e.target);
                           setRatingCount(
                             ratingCount + index <= 5
                               ? ratingCount + index + 1
@@ -361,7 +352,6 @@ const handleReview = ()=>{
               className=" border px-5 py-2 rounded bg-pink-600 hover:bg-pink-700 text-white"
               disabled={review.length === 0}
               onClick={() => {
-                console.log("Clicked");
                 handleReview()
               }}
             >

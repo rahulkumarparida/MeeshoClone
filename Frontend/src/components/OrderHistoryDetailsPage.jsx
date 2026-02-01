@@ -15,7 +15,6 @@ import { capitalize } from "lodash";
 const ProductsList = ({items})=>{
     const navigate = useNavigate()
 
-    // console.log(items);
     
 return <div className=" p-2 flex items-center justify-between px-8 cursor-pointer" onClick={()=>{navigate(`/product/${items.product.slug}`)}}>
         <div className="img">
@@ -69,7 +68,6 @@ const OrderHistoryDetailsPage = () => {
                 "Authorization":`Bearer ${access}`
             }
         })
-        console.log(response.data);
         
         if(response.status == 200){
         
@@ -89,7 +87,6 @@ const OrderHistoryDetailsPage = () => {
 
     } catch (error) {
 
-        console.error("Error Oucccered while fetch details.",error);
         return errorNotify("Unauthorised access")
 
 

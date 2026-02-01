@@ -53,18 +53,18 @@ const SellerDashboardPage = () => {
           Authorization: `Bearer ${access}`,
         },
       });
-      console.log(response.data);
+      
 
       setDashboardData(response.data);
       if (response) {
-        console.log(response.data.total_order[0].created_at.slice(0, 10));
+        
         const { arr1, arr2 } = splitobject(response.data.total_order);
-        console.log(arr1, arr2);
+        
         setCreatedAt(arr1);
         setAmount(arr2);
       }
     } catch (error) {
-      console.log(error);
+      
 
       return toast.error("Some error occured while fetching", {
         id: "sellerdashboarderror",

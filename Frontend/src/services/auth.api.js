@@ -49,7 +49,7 @@ export const verifyUser = async () => {
     
   } catch (error) {
     // If verification failed, try to refresh the token
-    console.error("Access token expired or invalid, trying to refresh...");
+    
     return await refreshAccessToken(refresh);
   }
 };
@@ -92,7 +92,6 @@ const refreshAccessToken = async (refreshToken) => {
           return { valid: true, newTokens: true };
         }
       } catch (verifyError) {
-        console.error("New token verification failed:", verifyError);
         return { valid: false, reason: "New token verification failed" };
       }
     }
@@ -100,7 +99,6 @@ const refreshAccessToken = async (refreshToken) => {
     return { valid: false, reason: "Refresh failed" };
     
   } catch (error) {
-    console.error("Token refresh error:", error);
     
     // Clear tokens on refresh failure
     localStorage.removeItem("tokens");

@@ -68,7 +68,6 @@ const [showPass2, setShowPass2] = useState(false);
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      console.log("response",response)
       if (response.status == 201) {
         setTimeout(() => {
             navigate("/login")
@@ -76,7 +75,6 @@ const [showPass2, setShowPass2] = useState(false);
       }
 
     } catch (err) {
-        console.error("error",err)
       setError("Registration failed. Please check inputs.");
     }
   };

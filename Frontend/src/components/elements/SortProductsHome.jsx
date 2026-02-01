@@ -33,7 +33,7 @@ useEffect(() => {
   
 if (selected.value !== null) {
   fetchFilteredData(selected  )
-  console.log(selected);
+
 }
 
   

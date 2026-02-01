@@ -22,7 +22,7 @@ const FilterProductsHome = () => {
   // Fetches Category 
   const fetchCatergory = async () => {
     const response = await api.get("/products/categories/");
-    // console.log(response);
+ 
     setFetchedCategories(response.data);
   };
   useEffect(() => {
@@ -36,10 +36,8 @@ const FilterProductsHome = () => {
 // Fetches FIletred data
 const fetchfiletrdData = async () => {
     let url = `/products/?category__slug=${selectedCat}`
-    console.log("sleected",selectedCat);
     if (selectedCat !== null) {
         let response =await api.get(url)
-        console.log("Products: ",response);
         
          response.data.results.length > 0?
          setProducts([...response.data.results])
@@ -67,7 +65,6 @@ useEffect(() => {
     if (!ele.children) return;
 
     if (ele.children.length > 0) {
-      // console.log("parent",ele.name);
 
       return (
         <div

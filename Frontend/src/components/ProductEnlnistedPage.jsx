@@ -7,6 +7,7 @@ import { Link , useNavigate } from "react-router-dom"
 import ProductEnlistedCard from "./elements/ProductEnlistedCard"
 import { VerifiedIcon } from "lucide-react"
 import Headers from "./Headers"
+import toast from "react-hot-toast"
 
 
 const ProductEnlnistedPage = () => {
@@ -28,13 +29,12 @@ const ProductEnlnistedPage = () => {
                 }
             })
 
-            console.log(response);
             setProducts(response.data)
             
             
         } catch (error) {
 
-            console.error("Error while fetching enlisted products", error);
+            toast.error("Error while fetching enlisted products");
             
             
         }

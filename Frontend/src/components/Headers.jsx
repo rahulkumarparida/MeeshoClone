@@ -44,7 +44,6 @@ const Headers = () => {
       const fetchCategories = async () => {
         const response = await api.get("/products/categories/");
 
-        // console.log("category:", response);
         setCategory(response.data);
       };
       fetchCategories();
@@ -97,9 +96,9 @@ const fetchSuggestion = useCallback(
       try {
         let response = await api.get(`/products/?search=${searchValue}`)
         setSuggestions([...response.data.results])
-        console.log("serach:", response);
+      
       } catch (error) {
-        console.error("Error fetching suggestions:", error)
+        toast.error("Error fetching suggestions")
       }
   
     }else{
@@ -117,11 +116,11 @@ const fetchSuggestion = useCallback(
 
   }
 function handleSearch(event){
-  console.log(event.key);
+  
   
   if (event.key == "Enter") {
     navigate(`/searchedProducts/${query}`)
-    console.log(true);
+
     
   }
 

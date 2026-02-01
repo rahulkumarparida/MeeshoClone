@@ -19,14 +19,13 @@ const ProductsDetailsPage = () => {
 
   const fetchProductDetails = async () => {
     try {
-      // console.log(slug.id);
 
       let response = await api.get(`/products/${slug.id}/`);
-      // console.log(response);
+   
 
       setProductsDetails(response.data);
     } catch (error) {
-      console.error(`Error Ocuured while fetching ${slug.id} details`, error);
+      toast.error(`Error Ocuured while fetching ${slug.id} details`, error);
     }
   };
 
@@ -39,8 +38,7 @@ const ProductsDetailsPage = () => {
     try {
       const tokens = tokenStorage.get();
       const authHead = tokens.access;
-      // console.log(req, authHead);
-
+     
       const response = await api.post("cart/add/", req, {
         headers: {
           Authorization: `Bearer ${authHead}`,
@@ -48,12 +46,11 @@ const ProductsDetailsPage = () => {
       });
 
       if (response.statusText !== "OK") {
-        // console.log(true);
+   
         return errorNotify("Product is out of Stock");
       }
 
       setTimeout(() => {
-        // console.log(response);
 
         return sucessNotify("Added to cart!!");
       }, 200);
@@ -61,7 +58,6 @@ const ProductsDetailsPage = () => {
       if (error.response.data.non_field_errors[0]) {
         return errorNotify("Product is out of Stock");
       }
-      // console.error("error while adding to cart:", error.response.data.non_field_errors[0]);
       return errorNotify("Error while Fetching the data");
     }
   };

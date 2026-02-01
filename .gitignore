@@ -8,3 +8,4 @@ migrations
 private.py
 MeeshoCLonePics/
 media/
+dump.sql

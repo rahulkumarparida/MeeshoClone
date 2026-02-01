@@ -26,20 +26,17 @@ const ProfilePage = () => {
                 }
             })
 
-            console.log(response)
             
             setUserData(response.data)
             
            
 
         } catch (error) {
-            console.error("Error while fetching user's data.")
         }
     }
 
 
     const handleLogout = ()=>{
-        console.log("Faaaa");
         
         tokenStorage.delete()
         setTimeout(() => {
@@ -50,7 +47,6 @@ const ProfilePage = () => {
 useEffect(() => {
     if(tokens == false){
         setTimeout(() => {
-        console.log("Loaddeed");
         navigate("/login")
     }, 400);
 

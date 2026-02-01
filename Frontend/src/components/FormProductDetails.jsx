@@ -22,7 +22,7 @@ const [loading, setLoading] = useState(false);
 const categoryDetails = async () => {
   try {
     const response = await api.get("/products/categories/");
-    console.log("category:", response);
+  
     setCategory(response.data);
   } catch (e) {}
 }
@@ -78,19 +78,16 @@ const sendProductDetails = async (e) => {
       formData.append("images", img);
     });
 
-    console.log("Sending:", newProduct);
 
     const response = await api.post("/products/", formData, {
       headers: { Authorization: `Bearer ${access}` }
     });
 
-    console.log(response);
-
     navigate(`/${response.data.slug}`)
 
 
   } catch (error) {
-    console.error(error);
+    toast.error(error);
   } finally {
     setLoading(false);
   }

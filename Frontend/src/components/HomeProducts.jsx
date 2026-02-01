@@ -32,7 +32,7 @@ const HomeProducts = () => {
 
   //   Infinite Scrolling
   const fetchProduct = async () => {
-    console.log("page value:", page);
+   
     
 
     if (isLoading || !hasNext) return;
@@ -44,7 +44,7 @@ const HomeProducts = () => {
       const buildProductsURL = `/products/?page=${page}`;
 
       let response = await api.get(buildProductsURL);
-      console.log("Home Res: ",response);
+    
       
       setHasNext(response.data.next == null ? false : true);
       setPage((prev) => prev + 1);  
@@ -68,10 +68,10 @@ const HomeProducts = () => {
     observerRef.current = new IntersectionObserver(
       (entries) => {
         setFilters(false)
-        if (filters==true) return console.log("filters",filters);
-        ;
+        
+        
         if (entries[0].isIntersecting ) {
-          console.log("Done");
+         
           
           fetchProduct();
         }
@@ -88,7 +88,7 @@ const HomeProducts = () => {
   }, [hasNext, isLoading]);
 
 const handleProductClick = (slug)=> {
-  console.log("reached",slug);
+ 
   
 
   navigate(`/product/${slug}`)

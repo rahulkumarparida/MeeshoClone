@@ -44,7 +44,6 @@ const UpdateProfile = () => {
           },
         });
   
-        console.log(response);
         setUserData({firstName:response.data.first_name ,lastName:response.data.last_name , email:response.data.email , phone:response.data.profile.phone , address:response.data.profile.address , avatar: response.data.profile.avatar ,role:response.data.role})
         if (response.data.role =="seller" && response.data.seller_profile !== null){
           setSellerData({business_name: response.data.seller_profile.business_name, gst_number: response.data.seller_profile.gst_number, kyc_document: response.data.seller_profile.kyc_document, is_approved: response.data.seller_profile.is_approved, submitted_at: response.data.seller_profile.submitted_at })
@@ -56,7 +55,7 @@ const UpdateProfile = () => {
         
   
       } catch (error) {
-        console.error("Error while fetching user's data.");
+        toast.error("Error while fetching user's data.");
       }
     }else{
       verifyUserValue(false)
@@ -71,7 +70,6 @@ const UpdateProfile = () => {
   useEffect(() => {
     if(tokens == false){
         setTimeout(() => {
-        console.log("Loaddeed");
         navigate("/login")
     }, 400);
 
@@ -102,7 +100,6 @@ const UpdateProfile = () => {
     "avatar": newData.avatar
 
   }
-console.log(request);
 
     try {
         const response = await api.patchForm("/users/me/update/", request ,{
@@ -112,7 +109,6 @@ console.log(request);
       });
 
       
-      console.log(response);
       setUserData({firstName:response.data.first_name ,lastName:response.data.last_name , email:response.data.email , phone:response.data.profile.phone , address:response.data.profile.address , avatar: response.data.profile.avatar,role:response.data.role})
       if (response.data.role =="seller" && response.data.seller_profile !== null){
           setSellerData({business_name: response.data.seller_profile.business_name, gst_number: response.data.seller_profile.gst_number, kyc_document: response.data.seller_profile.kyc_document, is_approved: response.data.seller_profile.is_approved, submitted_at: response.data.seller_profile.submitted_at })
@@ -125,13 +121,12 @@ console.log(request);
 
         
     } catch (error) {
-        console.error("Error while updating!!")        
+        toast.error("Error while updating!!") 
+
     }
 
 
   }
-
-console.log(sellerData);
 
 
   return verifyUserValue !== null &&

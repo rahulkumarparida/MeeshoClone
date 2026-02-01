@@ -33,7 +33,6 @@ export default function Login() {
 
       if (!res.ok) {
         const text = await res.text();
-        console.error("Login failed:", res.status, text);
         notify("Provided information is invalid" , "red")
         setEmail("")
         setPassword("")
@@ -47,7 +46,6 @@ export default function Login() {
 
       tokenStorage.set(response)
       setTimeout(() => {
-        console.log("TOken",tokenStorage.get().access)
         if (res.ok) {
         navigate('/')
       }
@@ -56,7 +54,6 @@ export default function Login() {
       setEmail("")
       setPassword("")
     } catch (err) {
-      console.error("Network or other error", err);
       setEmail("")
       setPassword("")
       notify(err , "red")

@@ -25,7 +25,6 @@ const fetchFilteredData = async (selected) => {
       let url =`/products/?${selected}`
       let response =await api.get(url)
 
-      console.log(response);
 
       setProducts([...response.data.results])
 
@@ -33,7 +32,7 @@ const fetchFilteredData = async (selected) => {
 
 }
 const handleProductClick = (slug)=> {
-  console.log("reached",slug);
+  
   
 
   navigate(`/product/${slug}`)
@@ -41,7 +40,7 @@ const handleProductClick = (slug)=> {
 }
 
 useEffect(() => {
-    console.log(params.search);
+    
     
    fetchFilteredData(`search=${params.search}`)
 }, [])

@@ -33,11 +33,9 @@ const OrderPage = () => {
                 }
             })
             
-            console.log(response);
             const products = response.data
             setCartProducts(products)
         } catch (error) {
-            console.error("Error while fecthing this data");
             
         }
    
@@ -61,7 +59,6 @@ const handleOrder = async (e) => {
       
           setUserData(userData)
 
-      console.log(access);
             
       let orderResponse = await api.post("/order/place/",
         {}
@@ -70,7 +67,6 @@ const handleOrder = async (e) => {
           "Authorization":`Bearer  ${access}`
         }
       })
-      console.log(orderResponse);
       
       setNewOrder(orderResponse.data)
 
@@ -105,7 +101,6 @@ const handleOrder = async (e) => {
       
       
     } catch (error) {
-      console.error("Error while handling Order Payment", error);
       if (error.response.status == 406) {
        return toast.error("Maximum quantity 5") 
       }

@@ -75,12 +75,10 @@ const SellerProductDetails = () => {
             }
         })
 
-        console.log(response);
         setSellerProductDetails(response.data)
         
     } catch (error) {
         toast.error("Product data not found.")
-        console.error("Error:", error.response.data.detail);
         
     }
 

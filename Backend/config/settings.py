@@ -60,9 +60,9 @@ MAILTRAP_USE_SSL = env('MAILTRAP_USE_SSL')
 SECRET_KEY = DJANGO_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1',]
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -141,11 +141,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': DB_NAME,  # Replace with your database name
-        'USER': DB_USER,  # Replace with your database username
-        'PASSWORD': DB_PASSWORD,  # Replace with your database password
-        'HOST': DB_HOST,  # Or the IP address/hostname of your PostgreSQL server
-        'PORT': DB_PORT,  # Default PostgreSQL port
+        'NAME': DB_NAME,  
+        'USER': DB_USER,  
+        'PASSWORD': DB_PASSWORD,  
+        'HOST': DB_HOST, 
+        'PORT': DB_PORT,  
     }
 }
 
@@ -154,7 +154,7 @@ cloudinary.config(
     cloud_name= CLOUDINARY_NAME,
     api_key=CLOUDINARY_API_KEY,
     api_secret=CLOUDINARY_API_SECRET,
-    # optional: set folder root or secure_url
+    
     SECURE= True,
 )
 
@@ -232,17 +232,18 @@ REST_FRAMEWORK = {
         
     # ],
     # 'DEFAULT_THROTTLE_RATES': {
-    #     'anon': '5/min',
-    #     'auth':'5/min',
-    #     'user': '200/hour',
-    #     "burst":"3/min",
-    #     "sustained":"510/day"
+    #     'anon': '150/min',
+    #     'user': '250/hour',
+    #     'auth':'10/day', 
+    #     "burst":"5/sec",
+    #     "sustained":"1000/day"
     # }
 }
 
 
+
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=50),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,

@@ -4,6 +4,7 @@ import LocalStorageManager from "../hooks/useLocalStorage.js"
 import { verifyUser } from "../services/auth.api.js"
 import Headers from "../components/Headers.jsx"
 import OrderHistoryCard from "./elements/OrderHistoryCard.jsx"
+import toast from "react-hot-toast"
 
 
 const OrderHistoryPage = () => {
@@ -27,12 +28,11 @@ const fetchOrderHistory = async () => {
             }
         })
 
-        console.log(response.data)
         setOrderHistory(response.data)
 
         
     } catch (error) {
-       console.error("Error while fetching order history");
+       toast.error("Error while fetching order history");
         
     }
     

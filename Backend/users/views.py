@@ -75,7 +75,7 @@ class RegisterView(generics.CreateAPIView):
 class MeView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
-    # throttle_classes = [RegisteringRateThrottle]
+    
 
     def get_object(self):
         return self.request.user
@@ -91,30 +91,29 @@ class ProfileUpdateView(generics.UpdateAPIView):
     def profile_update(self , request , *args , **kwargs):
         print(request.FILES)
         try:
-            with transaction.atomic():
-                data = request.data
-                authorized = User.objects.select_for_update().get(id=request.user.id)
-                profile = Profile.objects.select_for_update().get(user=authorized)
-                if authorized:
-                    authorized.first_name = data['first_name'] or authorized.first_name
-                    authorized.last_name = data['last_name'] or authorized.last_name
-                    authorized.save()
-                    
-                    profile.phone = data['phone'] or profile.phone
-                    profile.address = data['address'] or profile.address
-                    avatar = request.FILES.get('avatar')
-                    if avatar:
-                        profile.avatar = avatar 
-                    else:
-                        profile.avatar = profile.avatar
-                    profile.save()
-                    
-                    response = UserSerializer(authorized)
-                    print(response)
-                    return Response(response.data,status=status.HTTP_202_ACCEPTED)
-                    
-                    
-                return Response({"details":"No user found"}, status=status.HTTP_401_UNAUTHORIZED)
+            data = request.data
+            authorized = User.objects.get(id=request.user.id)
+            profile = Profile.objects.get(user=authorized)
+            if authorized:
+                authorized.first_name = data['first_name'] or authorized.first_name
+                authorized.last_name = data['last_name'] or authorized.last_name
+                authorized.save()
+                
+                profile.phone = data['phone'] or profile.phone
+                profile.address = data['address'] or profile.address
+                avatar = request.FILES.get('avatar')
+                if avatar:
+                    profile.avatar = avatar 
+                else:
+                    profile.avatar = profile.avatar
+                profile.save()
+                
+                response = UserSerializer(authorized)
+                print(response)
+                return Response(response.data,status=status.HTTP_202_ACCEPTED)
+                
+                
+            return Response({"details":"No user found"}, status=status.HTTP_401_UNAUTHORIZED)
                 
             
         except User.DoesNotExist :

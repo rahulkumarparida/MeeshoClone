@@ -3,6 +3,7 @@ import LocalStorageManager from "../../hooks/useLocalStorage.js"
 import { useState , useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Plus , Minus } from "lucide-react";
+import toast from "react-hot-toast";
 
 
 const CartProductCard = ({ele}) => {
@@ -23,7 +24,7 @@ const updateCartProduct = async (cartItemId , qty)=> {
     
     const tokens = new LocalStorageManager("tokens")
     const access = tokens.get().access
-    console.log(cartItemId , qty);
+  
     
    setTimeout(async () => {
          try {
@@ -37,14 +38,13 @@ const updateCartProduct = async (cartItemId , qty)=> {
             }
         })
 
-        console.log(response);
         if (response.statusText == "OK") {
             
         }
 
     } catch (error) {
 
-        console.error("Error: while adding to cart" , error)
+        toast.error("Error: while adding to cart" , error)
     }
     
     
@@ -66,10 +66,9 @@ const removeCartItem = async () => {
     if(response.status == 204){
       location.reload()
     }
-    console.log(response);
     
   }catch(error){
-    console.error("Error while removing cart item.")
+    toast.error("Error while removing cart item.")
   }
 }
 
