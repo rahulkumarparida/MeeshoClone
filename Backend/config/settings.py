@@ -90,11 +90,15 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'django_celery_results',
     'django_celery_beat',
-    'django_weasyprint',
     "corsheaders",
-    #  pip install flower
 
 ]
+
+CELERY_WORKER= env('CELERY_WORKER')
+if not CELERY_WORKER:
+    INSTALLED_APPS+=[
+    'django_weasyprint',
+    ]
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",

@@ -19,10 +19,13 @@ from django.urls import path , include
 from django.conf.urls.static import static
 from django.conf import settings
 
+from .views import health_check
+
 from orders.views import SellerDashboardView
 from products.views import ProductEnlistedView , ProductEnlistedDetailsView
 
 urlpatterns = [
+    path('',health_check,name="health_cehck_api"),
     path('admin/', admin.site.urls),
     path('users/' , include('users.urls')),
     path('products/', include('products.urls')),
