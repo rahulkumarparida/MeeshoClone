@@ -129,7 +129,7 @@ const handleProductClick = (slug)=> {
 
         {/* Checks if the user has scrolled to the required threshold to trigger the API call */}
         <div ref={loaderRef} className="h-20 flex items-center justify-center">
-          {isLoading && <p>Loading products...</p>}
+          {isLoading && <div className="loadings"></div>}
           {!hasNext && (
             <div className="lg:text-2xl text-gray-700 p-3 m-2 text-center">
               No more products 

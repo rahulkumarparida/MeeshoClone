@@ -11,34 +11,46 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-import private
+
 from datetime import timedelta
 import os
 import cloudinary
+import environ
+import os
 
-DB_NAME = private.dbname
-DB_USER = private.user
-DB_PASSWORD =  private.password
-DB_HOST = private.host
-DB_PORT = private.port
-CLOUDINARY_NAME = private.CLOUDINARY_NAME
-CLOUDINARY_API_KEY = private.CLOUDINARY_API_KEY
-CLOUDINARY_API_SECRET = private.CLOUDINARY_API_SECRET
-DJANGO_SECRET_KEY = private.DJANGO_SECRET_KEY
-REDIS_PORT = private.REDIS_PORT
-REDIS_SERVER = private.REDIS_SERVER
+BASE_DIR = Path(__file__).resolve().parent.parent   
+# Initialize environ
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+
+# Read .env file
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+# Use variables
+DB_NAME = env('dbname')
+DB_USER =env('user')
+DB_PASSWORD =env('password')
+DB_HOST =env('host')
+DB_PORT =env('port')
+CLOUDINARY_NAME = env('CLOUDINARY_NAME')
+CLOUDINARY_API_KEY = env('CLOUDINARY_API_KEY')
+CLOUDINARY_API_SECRET = env('CLOUDINARY_API_SECRET')
+DJANGO_SECRET_KEY = env('DJANGO_SECRET_KEY')
+REDIS_PORT = env('REDIS_PORT')
+REDIS_SERVER = env('REDIS_SERVER')
 
 
-MAILTRAP_BACKEND = private.MAILTRAP_BACKEND
-MAILTRAP_HOST = private.MAILTRAP_HOST
-MAILTRAP_HOST_USER = private.MAILTRAP_HOST_USER
-MAILTRAP_HOST_PASSWORD = private.MAILTRAP_HOST_PASSWORD
-MAILTRAP_PORT = private.MAILTRAP_PORT
-MAILTRAP_USE_TLS = private.MAILTRAP_USE_TLS
-MAILTRAP_USE_SSL = private.MAILTRAP_USE_SSL
+MAILTRAP_BACKEND = env('MAILTRAP_BACKEND')
+MAILTRAP_HOST = env('MAILTRAP_HOST')
+MAILTRAP_HOST_USER = env('MAILTRAP_HOST_USER')
+MAILTRAP_HOST_PASSWORD = env('MAILTRAP_HOST_PASSWORD')
+MAILTRAP_PORT = env('MAILTRAP_PORT')
+MAILTRAP_USE_TLS = env('MAILTRAP_USE_TLS')
+MAILTRAP_USE_SSL = env('MAILTRAP_USE_SSL')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -273,7 +285,10 @@ CACHES = {
 }
 
 # Razorpay
-from private import RAZORPAY_API_KEY,RAZORPAY_API_KEY_SECRET
+
+RAZORPAY_API_KEY=env("RAZORPAY_API_KEY")
+RAZORPAY_API_KEY_SECRET=env("RAZORPAY_API_KEY_SECRET")
+
 
 RAZORPAY_KEY_ID=RAZORPAY_API_KEY
 RAZORPAY_KEY_SECRET=RAZORPAY_API_KEY_SECRET

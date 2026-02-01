@@ -68,7 +68,9 @@ useEffect(() => {
           );
         })
         :
-        "No Products Avaliable"
+        <div className="h-screen w-screen text-xl md:text-3xl text-gray-600 font-bold flex justify-center items-center">
+                    No Products of the serached name.
+        </div>
         }
         </div>
     </div>

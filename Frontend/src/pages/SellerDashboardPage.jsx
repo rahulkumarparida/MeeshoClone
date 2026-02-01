@@ -150,7 +150,7 @@ const SellerDashboardPage = () => {
     </>
   ) : (
     <div className="h-screen w-screen text-xl md:text-3xl text-gray-600 font-bold flex justify-center items-center">
-      You are not authorizrd to accesss this page
+      <div className="loadings"></div>
     </div>
   );
 };

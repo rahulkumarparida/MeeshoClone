@@ -54,13 +54,18 @@ useEffect(() => {
         <div className="p-5">
             {
                 orderHistory !== null && verification.valid ?
-                orderHistory.map((ele,idx)=>{
+                orderHistory.length>0 ? orderHistory.map((ele,idx)=>{
                     return <div key={idx} >
                         <OrderHistoryCard ele={ele}  />
                     </div>
-                })
+                }):
+                <div className="h-screen  text-xl md:text-3xl text-gray-600 font-bold flex justify-center items-center">
+                    No History
+                </div>
                 :
-                "No History"
+                <div className="h-screen text-xl md:text-3xl text-gray-600 font-bold flex justify-center items-center">
+                   <div className="loadings"></div>
+                </div>
             }
             
         </div>

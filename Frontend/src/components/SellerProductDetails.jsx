@@ -194,7 +194,10 @@ useEffect(() => {
     </div>
     :
     <div>
-        Not Authorised
+        {
+        <div className="loadings"></div>
+     
+    }
     </div>
 }
 

@@ -170,7 +170,10 @@ return verifyUserValue !== null&& verifyUserValue.valid && userData != null ?
   )
 :
 <div className="text-xl md:text-4xl h-screen flex items-center justify-center text-gray-600 font-bold" >
-    Not Authorized Login Again
+    {
+            <div className="loadings"></div>
+       
+    } 
 </div>
 
   

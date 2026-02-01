@@ -370,7 +370,9 @@ const handleReview = ()=>{
           </div>
         </div>
       <div className="body text-xl text-center">
-        No reviews found for this products
+        {
+        <div className="loadings"></div>
+        }
       </div>
     </div>
   );
