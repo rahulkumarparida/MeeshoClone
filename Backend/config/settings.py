@@ -62,7 +62,7 @@ SECRET_KEY = DJANGO_SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1','meeshoclone-api.onrender.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1','meeshoclone-api.onrender.com',"meesho-clone-pink.vercel.app"]
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -112,6 +112,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
+    "https://meesho-clone-pink.vercel.app/"
 ]
 
 
