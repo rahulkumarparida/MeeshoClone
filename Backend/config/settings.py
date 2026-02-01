@@ -297,6 +297,30 @@ RAZORPAY_KEY_SECRET=RAZORPAY_API_KEY_SECRET
 RAZORPAY_CALLBACK_URL = "http://127.0.0.1:8000/payment/verify/"
 REDIRECT_URL="http://localhost:5173/order/history/"
 
+# For checkingn error log purposess.
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "ERROR",
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "ERROR",
+            "propagate": True,
+        },
+    },
+}
+
+
 # SECURE_SSL_REDIRECT = True
 # SESSION_COOKIE_SECURE = True
 # CSRF_COOKIE_SECURE = True
