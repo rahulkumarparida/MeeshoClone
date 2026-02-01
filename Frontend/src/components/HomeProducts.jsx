@@ -76,7 +76,7 @@ const HomeProducts = () => {
           fetchProduct();
         }
       },
-      { threshold: 0.1, rootMargin: '200px' }
+      { threshold: 0.085, rootMargin: '200px' }
     );
 
     observerRef.current.observe(loaderRef.current);
@@ -119,7 +119,7 @@ const handleProductClick = (slug)=> {
         id="products"
         className="  products md:w-[75%]   p-2 flex flex-wrap "
       >
-        {products.length == 0?<div className="text-4xl text-gray-700">Products are not availiable right now.</div>:products.map((ele, idx) => {
+        {products.length == 0?<div className="text-4xl text-gray-700"></div>:products.map((ele, idx) => {
           return (
             <div key={ele.slug}  >
               <ProductsCard ele={ele} onClick={() => handleProductClick(ele.slug)}  />
@@ -127,7 +127,6 @@ const handleProductClick = (slug)=> {
           );
         })}
 
-        {/* Checks if the user has scrolled to the required threshold to trigger the API call */}
         <div ref={loaderRef} className="h-20 flex items-center justify-center">
           {isLoading && <div className="loadings"></div>}
           {!hasNext && (

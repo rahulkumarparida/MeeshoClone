@@ -16,6 +16,8 @@ const ReviewAndRating = ({ product_id, avg_rating }) => {
   const [review, setReview] = useState("");
   const [reviewCheck, setReviewCheck] = useState("Type your review here...");
 
+  const [loaderLoads, setLoaderLoads] = useState(false)
+
   const ratingColor = (rating) => {
     if (rating == 5) {
       setText("Excellent");
@@ -57,6 +59,7 @@ const ReviewAndRating = ({ product_id, avg_rating }) => {
   };
 
   const fetchReviews = async () => {
+    setLoaderLoads(true)
     try {
       let response = await api.get(`/reviews/${product_id}/`);
 
@@ -66,6 +69,7 @@ const ReviewAndRating = ({ product_id, avg_rating }) => {
     } catch (error) {
       return toast.error("Some error ouccured");
     }
+    setLoaderLoads(false)
   };
   
   
@@ -360,8 +364,9 @@ const handleReview = ()=>{
           </div>
         </div>
       <div className="body text-xl text-center">
-        {
+        {loaderLoads?
         <div className="loadings"></div>
+        :"No Reviews"
         }
       </div>
     </div>

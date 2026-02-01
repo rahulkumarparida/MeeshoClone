@@ -11,6 +11,9 @@ const ProductsDetailsPage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [productsDetails, setProductsDetails] = useState(null);
   const [quantityCount, SetQuantityCount] = useState(1);
+
+  const [loaderLoads, setLoaderLoads] = useState(false)
+
   const slug = useParams();
   const tokenStorage = new LocalStorageManager("tokens");
 
@@ -18,15 +21,18 @@ const ProductsDetailsPage = () => {
   const sucessNotify = (message) => toast.success(message);
 
   const fetchProductDetails = async () => {
+    setLoaderLoads(true)
     try {
 
       let response = await api.get(`/products/${slug.id}/`);
    
 
       setProductsDetails(response.data);
+
     } catch (error) {
       toast.error(`Error Ocuured while fetching ${slug.id} details`, error);
     }
+    setLoaderLoads(false)
   };
 
   const postCartDetails = async (params) => {
@@ -64,6 +70,9 @@ const ProductsDetailsPage = () => {
 
   useEffect(() => {
     fetchProductDetails();
+
+      
+
   }, []);
 
   const handleCartClick = () => {
@@ -73,8 +82,11 @@ const ProductsDetailsPage = () => {
   return (
     <>
       {productsDetails == null ? (
-        <div className="pt-80  text-center text-xl md:text-3xl">
-          No information avaliable about this product
+        <div className="pt-80  h-screen flex items-center justify-center text-center text-xl md:text-3xl">
+          {
+            loaderLoads?<div className="loadings"></div>:"No information avaliable about this product"
+          }
+          
         </div>
       ) : (
         <div className="">
