@@ -95,11 +95,7 @@ INSTALLED_APPS = [
 
 ]
 
-CELERY_WORKER=  env.bool('CELERY_WORKER', default=False)    
-if not CELERY_WORKER:
-    INSTALLED_APPS+=[
-    'django_weasyprint',
-    ]
+
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
