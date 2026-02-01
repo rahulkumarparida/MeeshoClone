@@ -94,7 +94,7 @@ INSTALLED_APPS = [
 
 ]
 
-CELERY_WORKER= env('CELERY_WORKER')
+CELERY_WORKER=  env.bool('CELERY_WORKER', default=False)    
 if not CELERY_WORKER:
     INSTALLED_APPS+=[
     'django_weasyprint',

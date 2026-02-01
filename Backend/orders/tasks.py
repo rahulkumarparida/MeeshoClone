@@ -4,7 +4,6 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.http import HttpResponse
-from weasyprint import HTML , CSS
 from django.conf import settings
 import datetime
 
@@ -13,6 +12,7 @@ from .models import Order , OrderItem
 
 # @shared_task
 def create_order_invoice(email , orderid):
+    from weasyprint import HTML , CSS   
     orderItems = OrderItem.objects.filter(order__id=int(orderid)).values('product__title' , 'quantity','unit_price')
     print(orderItems)
     orders = []
