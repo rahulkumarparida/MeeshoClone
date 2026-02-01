@@ -3,6 +3,7 @@
 venv
 .venv-linux
 .env
+.env.prod
 __pycache__
 migrations
 private.py
