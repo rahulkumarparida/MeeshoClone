@@ -45,6 +45,7 @@ const HomeProducts = () => {
 
       let response = await api.get(buildProductsURL);
     
+   
       
       setHasNext(response.data.next == null ? false : true);
       setPage((prev) => prev + 1);  
@@ -122,7 +123,7 @@ const handleProductClick = (slug)=> {
         {products.length == 0?<div className="text-4xl text-gray-700"></div>:products.map((ele, idx) => {
           return (
             <div key={ele.slug}  >
-              <ProductsCard ele={ele} onClick={() => handleProductClick(ele.slug)}  />
+              <ProductsCard key={idx}  ele={ele} onClick={() => handleProductClick(ele.slug)}  />
             </div>
           );
         })}

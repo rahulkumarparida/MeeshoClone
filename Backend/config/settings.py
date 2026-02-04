@@ -92,7 +92,6 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'django_weasyprint',
     "corsheaders",
-
 ]
 
 
@@ -112,7 +111,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
-    "https://meesho-clone-pink.vercel.app/"
+    "https://meesho-clone-pink.vercel.app"
 ]
 
 
@@ -226,6 +225,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'PAGE_SIZE': 15,
     # 'DEFAULT_THROTTLE_CLASSES': [
     #     'rest_framework.throttling.AnonRateThrottle',

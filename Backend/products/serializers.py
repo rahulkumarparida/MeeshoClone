@@ -34,16 +34,17 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class ProductReadSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True , read_only=True)
-    category = CategorySerializer(read_only=True)
-    inventory = serializers.IntegerField(source="inventory.quantity" , read_only=True)
-    available = serializers.IntegerField(source="inventory.reserved" , read_only=True)
+    # category = CategorySerializer(read_only=True)
+    # inventory = serializers.IntegerField(source="inventory.quantity" , read_only=True)
+    # available = serializers.IntegerField(source="inventory.reserved" , read_only=True)
+    # ,'inventory','available'
     average_rating = serializers.SerializerMethodField()
     review_count = serializers.SerializerMethodField()
     
     class Meta:
         model=Product
-        fields=['id','title','slug','description','price','category','images','inventory','available','seller','average_rating','review_count','is_active','created_at']
-        read_only_fields = ['seller','inventory','available','average_rating','review_count','created_at']
+        fields=['id','title','slug','description','price','images','average_rating','review_count','is_active','created_at']
+        read_only_fields = ['id','average_rating','review_count','created_at']
         
     
     def get_average_rating(self,obj):

@@ -7,6 +7,7 @@ import api from '../services/api.js'
 import { useState , useEffect  , useCallback} from 'react'
 import { debounce } from 'lodash'
 import { useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
 
 const Headers = () => {
 
@@ -23,7 +24,9 @@ const Headers = () => {
         : null;
 
     function renderCategories(categories) {
-      
+      if( categories == null){
+        return ""
+      }
 
       return categories.map((cat) => (
         <div key={cat.id} className="ml-4" >
@@ -40,12 +43,27 @@ const Headers = () => {
       ));
     }
 
-    useEffect(() => {
-      const fetchCategories = async () => {
-        const response = await api.get("/products/categories/");
 
-        setCategory(response.data);
-      };
+    const fetchCategories = async () => {
+        try{
+
+          const response = await api.get("/products/categories/");
+
+        
+            setCategory(response.data);
+         return
+        }   
+        catch(err){
+         
+          return toast.error("error occured while fetching catgories")
+          
+        }
+        };
+
+
+
+    useEffect(() => {
+      
       fetchCategories();
     }, []);
 

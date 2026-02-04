@@ -70,7 +70,7 @@ class ProductViewset(viewsets.ModelViewSet):
         return qs
 
     def list(self, request, *args, **kwargs):
-        cache_key = f"products:{request.get_full_path()}"
+        cache_key = f"products"
         
         data = cache.get(cache_key)
         if data:

@@ -3,8 +3,7 @@ import { useState, useEffect } from "react";
 import api from "../../services/api.js";
 import { useProducts } from "../../context/ProductContext";
 import { ChevronDown , ChevronUp } from "lucide-react";
-
-
+import toast from "react-hot-toast";
 
 
 
@@ -21,9 +20,21 @@ const FilterProductsHome = () => {
   
   // Fetches Category 
   const fetchCatergory = async () => {
-    const response = await api.get("/products/categories/");
+    try{
+
+          const response = await api.get("/products/categories/");
+         
+  
+            setFetchedCategories(response.data);
+        return
+        }   
+        catch(err){
+          
+          return toast.error("error occured while fetching catgories")
+          
+        }
+    
  
-    setFetchedCategories(response.data);
   };
   useEffect(() => {
     fetchCatergory();
