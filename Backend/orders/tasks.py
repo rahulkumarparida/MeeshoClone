@@ -67,7 +67,7 @@ def send_order_confirmation_email(email , orderid):
     # mail.attach(filename="invoice.pdf" , content=pdf_byte , mimetype="application/pdf")
     
     # mail.send()
-    print("mail sent to user")    
+    # print("mail sent to user")    
     
     return {'order':'Order sucessfully created!!'}
 

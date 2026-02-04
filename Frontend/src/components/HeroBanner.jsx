@@ -1,5 +1,3 @@
-import React from 'react'
-
 import meeshoBanner from "../assets/meeshoBanner.webp"
 
 const HeroBanner = () => {

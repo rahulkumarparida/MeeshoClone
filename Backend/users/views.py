@@ -13,20 +13,7 @@ from config.services import validate_authorization
 
 
 
-'''
-{
-    email: "",
-    first_name: "",
-    last_name: "",
-    role: "customer",
-    phone: "",
-    address: "",
-    avatar: null,
-    business_name: "",
-    gst_number: "",
-    kyc_document: null,
-  }
-'''
+
 
 class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
@@ -34,9 +21,9 @@ class RegisterView(generics.CreateAPIView):
     # throttle_classes = [RegisteringRateThrottle]
     
     def create(self, request, *args, **kwargs):
-        print("went through here")
+        
         req_data = request.data
-        print(req_data)
+       
         try:
             with transaction.atomic():
                 fields = ["email","first_name","last_name","role","password","password2","phone"]
@@ -89,7 +76,7 @@ class ProfileUpdateView(generics.UpdateAPIView):
         return self.request.user.profile
     
     def profile_update(self , request , *args , **kwargs):
-        print(request.FILES)
+    
         try:
             data = request.data
             authorized = User.objects.get(id=request.user.id)
@@ -109,7 +96,7 @@ class ProfileUpdateView(generics.UpdateAPIView):
                 profile.save()
                 
                 response = UserSerializer(authorized)
-                print(response)
+                
                 return Response(response.data,status=status.HTTP_202_ACCEPTED)
                 
                 

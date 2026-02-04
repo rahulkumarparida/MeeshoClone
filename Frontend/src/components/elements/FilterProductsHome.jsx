@@ -1,4 +1,3 @@
-import React from "react";
 import { useState, useEffect } from "react";
 import api from "../../services/api.js";
 import { useProducts } from "../../context/ProductContext";
@@ -48,10 +47,11 @@ const FilterProductsHome = () => {
 const fetchfiletrdData = async () => {
     let url = `/products/?category__slug=${selectedCat}`
     if (selectedCat !== null) {
+
         let response =await api.get(url)
-        
-         response.data.results.length > 0?
-         setProducts([...response.data.results])
+       
+         response.data.length > 0?
+         setProducts([...response.data])
          :
             setProducts([])
    

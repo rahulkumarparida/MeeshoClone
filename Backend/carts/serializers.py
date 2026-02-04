@@ -21,7 +21,7 @@ class CartSerializer(serializers.ModelSerializer):
         read_only_fields = ['user','created_at']
     
     def get_total(self ,obj):
-        print(obj.items)
+        
         total = 0
         for i in obj.items.all():
             total += (i.quantity*i.unit_price)

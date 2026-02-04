@@ -4,8 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status , generics , permissions
 from django.db import transaction
 from django.db.models import F , Prefetch
-from celery.result import AsyncResult
-from config.celery import app
+
 from django.conf import settings
 
 
@@ -16,7 +15,6 @@ from .permissions import IsOwnerOrAdmin
 from .serializers import OrderSerializer , OrderItemSerializer
 from .tasks import send_order_confirmation_email
 from payments.models import Payment
-from django.shortcuts import get_object_or_404
 import razorpay
 
 # Create your views here.

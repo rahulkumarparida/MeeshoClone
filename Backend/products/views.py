@@ -1,8 +1,6 @@
 from rest_framework import viewsets , filters , status
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
-from django.db.models import Prefetch
 from rest_framework.exceptions import PermissionDenied
 from django.core.cache import cache 
 from rest_framework import generics
@@ -27,7 +25,7 @@ class ProductViewset(viewsets.ModelViewSet):
     search_fields  = ['title' , 'description']
     ordering_fields = ['price' , 'created_at']
     lookup_field = "slug"
-    
+    pagination_class  =None
     
     
     
@@ -55,14 +53,16 @@ class ProductViewset(viewsets.ModelViewSet):
         if not user.is_authenticated and user.role != "seller":
             
             raise PermissionDenied("Only Seller can create products") 
-        cache.delete("products") 
+        full_path = self.request.get_full_path()
+        cache.delete(f"products:{full_path}") 
         serializer.save()
         
     def partial_update(self, request, *args, **kwargs):
         return super().partial_update(request, *args, **kwargs)
     
     def perform_update(self, serializer):
-        cache.delete("products") 
+        full_path = self.request.get_full_path()
+        cache.delete(f"products:{full_path}") 
         return super().perform_update(serializer)  
     
     def get_queryset(self):
@@ -70,7 +70,8 @@ class ProductViewset(viewsets.ModelViewSet):
         return qs
 
     def list(self, request, *args, **kwargs):
-        cache_key = f"products"
+        full_path = request.get_full_path()
+        cache_key = f"products:{full_path}"
         
         data = cache.get(cache_key)
         if data:
@@ -90,7 +91,7 @@ class InventoryViewset(viewsets.ModelViewSet):
     def get_queryset(self):
         if self.request.user.is_authenticated and self.request.user.role == "seller": 
             param = self.kwargs.get("product")
-            print("param",param)
+            
             
             qs = Inventory.objects.filter(product__id=param)
             return qs
@@ -106,7 +107,7 @@ class InventoryViewset(viewsets.ModelViewSet):
             if reqSerializer.is_valid():
             
                 reqSerializer.save()   
-                print(reqSerializer.data)   
+                 
     
                 return  Response(reqSerializer.data)
         raise PermissionDenied("Only Seller can view this inventory") 

@@ -1,14 +1,13 @@
-import React from "react";
 import { useEffect, useState } from "react";
 import api from "../services/api.js";
 import ProductsCard from "./elements/ProductsCard.jsx";
-import { data, useAsyncError , useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import SortProductsHome from "./elements/SortProductsHome.jsx";
 
 import { useProducts } from "../context/ProductContext.jsx";
 import FilterProductsHome from "./elements/FilterProductsHome.jsx";
-import { Link } from "lucide-react";
+
 
 
 
@@ -45,11 +44,10 @@ const HomeProducts = () => {
 
       let response = await api.get(buildProductsURL);
     
-   
       
       setHasNext(response.data.next == null ? false : true);
       setPage((prev) => prev + 1);  
-      setProducts((prev) => [...prev, ...response.data.results]);
+      setProducts((prev) => [...prev, ...response.data]);
     } catch (error) {
       setError("Failed to load products");
     } finally {
@@ -68,7 +66,7 @@ const HomeProducts = () => {
 
     observerRef.current = new IntersectionObserver(
       (entries) => {
-        setFilters(false)
+       
         
         
         if (entries[0].isIntersecting ) {

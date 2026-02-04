@@ -80,7 +80,7 @@ class ProductWriteSerializer(serializers.ModelSerializer):
     
     
     def update(self, instance, validated_data):
-        print("Came till serializer")
+        
         images = validated_data.pop("images",None)
         for attr , val in validated_data.items():
             setattr(instance,attr , val)

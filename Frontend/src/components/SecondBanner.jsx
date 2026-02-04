@@ -1,6 +1,3 @@
-import React from 'react'
-import meeshoBanner2 from "../assets/meeshoBanner2.webp"
-
 import meanWear from '../assets/meanWear.webp'
 import jewllery from '../assets/jwellery.webp'
 import homedecor from '../assets/homedecor.webp'

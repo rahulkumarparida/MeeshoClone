@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import blankstar from "../assets/blankstar.png";
 import fillstar from "../assets/fillstar.png";
 import LocalStorageManager from "../hooks/useLocalStorage.js";
-import { verifyUser } from "../services/auth.api.js";
+
 
 const ReviewAndRating = ({ product_id, avg_rating }) => {
   const token = new LocalStorageManager("tokens");

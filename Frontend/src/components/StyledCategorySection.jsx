@@ -1,7 +1,3 @@
-import React from 'react'
-
-import { Link } from "react-router-dom";
-
 import watches from "../assets/Watches.png"
 import mobileAccessories from "../assets/Mobile Accessories.png"
 import cameraAccesories from "../assets/Camera Accesories.png"

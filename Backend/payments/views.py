@@ -1,12 +1,10 @@
-from django.shortcuts import render , redirect
+from django.shortcuts import redirect
 from django.conf import settings
 from .models import Payment
-from .serializers import PaymentSerializer
 from rest_framework.response import Response
-from rest_framework import viewsets ,status
+from rest_framework import status
 from rest_framework.decorators import APIView
-from rest_framework.permissions import IsAuthenticated , IsAdminUser
-from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticated 
 from django.db import transaction
 from django.db.models import F
 import razorpay
@@ -20,6 +18,7 @@ from products.models import Inventory , Product
 client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID,settings.RAZORPAY_KEY_SECRET))
 
 class PaymentCallbackViewset(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self , request):
         if "razorpay_signature" in request.data:
             try:

@@ -1,5 +1,5 @@
 import { useState , useEffect } from 'react';
-import { ChevronDown, Plus, Tag, IndianRupee, FileText, Layers, Image } from 'lucide-react';
+import { Plus, Tag, IndianRupee, FileText, Layers, Image } from 'lucide-react';
 import api from '../services/api';
 import loader from "../assets/loader.gif";
 import { useNavigate } from 'react-router-dom';

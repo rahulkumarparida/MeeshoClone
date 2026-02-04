@@ -1,5 +1,3 @@
-import React from "react";
-
 const ScrollBrandsComponents = () => {
   let brands = [
     "https://images.meesho.com/images/marketing/1743159302944.webp",

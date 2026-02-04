@@ -21,12 +21,10 @@ export default function Login() {
         email: email,
         password: password,
     };
-    console.log(req);
     
     try {
       const res = await api.post("users/login/",req);
 
-      console.log(res); 
       tokenStorage.set(res.data)      
 
       navigate('/')

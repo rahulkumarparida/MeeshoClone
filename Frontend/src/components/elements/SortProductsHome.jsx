@@ -1,15 +1,8 @@
-import React from "react";
+
 import { useState , useEffect } from "react";
 import { ChevronDown, Check } from "lucide-react";
 import { useProducts } from "../../context/ProductContext.jsx";
-import api from "../../services/api.js";
 
-
-// Filters calls
-// http://127.0.0.1:8000/products/?category__slug=camera-accessories category based filter products
-// http://127.0.0.1:8000/products/?price__gte=12333&price__lte= price based filter products
-// http://127.0.0.1:8000/products/?ordering=-price ordering by price - or ""
-// http://127.0.0.1:8000/products/?ordering=created_at ordering bt created date
 
 
 const options = [
