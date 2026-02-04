@@ -96,7 +96,7 @@ const handleOrder = async (e) => {
 };
 
       var rzp1 = new Razorpay(options);
-
+      
       rzp1.open();
       
       

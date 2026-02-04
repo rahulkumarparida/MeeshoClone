@@ -18,7 +18,7 @@ from products.models import Inventory , Product
 client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID,settings.RAZORPAY_KEY_SECRET))
 
 class PaymentCallbackViewset(APIView):
-    permission_classes = [IsAuthenticated]
+    
     def post(self , request):
         if "razorpay_signature" in request.data:
             try:
@@ -26,12 +26,12 @@ class PaymentCallbackViewset(APIView):
                 payment_id = request.data.get("razorpay_payment_id")
                 signature = request.data.get("razorpay_signature")
             except KeyError:
-                return Response({"detail":"Invalid Payload"},status=status.HTTP_400_BAD_REQUEST)
+                return redirect(settings.REDIRECT_FAILURE_URL)
 
             try:
                 order= Order.objects.get(reference_id=order_id)
             except Order.DoesNotExist:
-                return Response({"details":"Order does not exist"},status=status.HTTP_400_BAD_REQUEST)
+                return redirect(settings.REDIRECT_FAILURE_URL)
        
             try:
                 client.utility.verify_payment_signature({
@@ -48,7 +48,7 @@ class PaymentCallbackViewset(APIView):
                         
                     order.save()
     
-                return Response({"details":"Invalid Signature"},status=status.HTTP_400_BAD_REQUEST)
+                return redirect(settings.REDIRECT_FAILURE_URL)
            
                
 
@@ -84,14 +84,12 @@ class PaymentCallbackViewset(APIView):
                     # response = AsyncResult(email_response,app=app)
                         
                     order.save()
-                    return redirect(settings.REDIRECT_URL)
+                    return redirect(settings.REDIRECT_SUCCESS_URL)
                     
                     
             except ValueError as e:
                 
-                
-                
-                return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+                return redirect(settings.REDIRECT_FAILURE_URL)
         
             
             

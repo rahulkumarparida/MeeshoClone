@@ -37,9 +37,11 @@ const ProductsDetailsPage = () => {
 
   const postCartDetails = async (params) => {
     let req = {
-      product_id: productsDetails.id,
-      quantity: quantityCount,
+      "product_id": productsDetails.id,
+      "quantity": quantityCount,
     };
+    console.log(req);
+    
 
     try {
       const tokens = tokenStorage.get();
@@ -61,6 +63,8 @@ const ProductsDetailsPage = () => {
         return sucessNotify("Added to cart!!");
       }, 200);
     } catch (error) {
+      console.error(error);
+      
       if (error.response.data.non_field_errors[0]) {
         return errorNotify("Product is out of Stock");
       }
