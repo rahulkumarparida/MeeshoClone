@@ -25,6 +25,7 @@ const App = () => {
     <div className='min-h-screen cursor-default'>
       
       <Toaster/>
+      
       <div > 
       <Routes >
         <Route path="/" element={<HomePage />} /> 

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Product , ProductImage , Category , Inventory 
 from django.db import models
-
+from .tasks import upload_product_images_to_cloudinary
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
@@ -70,11 +70,14 @@ class ProductWriteSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         images = validated_data.pop('images',[])
         seller = self.context['request'].user
+        if not seller or seller.role != "seller":
+            raise serializers.ValidationError("Only sellers can create products.")
+        
         product = Product.objects.create(seller=seller,**validated_data)
         
         
-        for img in images:
-            ProductImage.objects.create(product=product , image=img)
+        if images:
+            upload_product_images_to_cloudinary.delay(product.id , images)
             
         return product
     
@@ -85,10 +88,10 @@ class ProductWriteSerializer(serializers.ModelSerializer):
         for attr , val in validated_data.items():
             setattr(instance,attr , val)
         instance.save()
-        if images is not None:
-            
-            for img in images:
-                ProductImage.objects.create(product=instance , images=img)
+        if images is not None and len(images)>0:
+            ProductImage.objects.filter(product=instance).delete()
+            upload_product_images_to_cloudinary.delay(instance.id , images)
+
         return  instance
     
     

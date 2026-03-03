@@ -147,7 +147,7 @@ DATABASES = {
         'PASSWORD': DB_PASSWORD,  
         'HOST': DB_HOST, 
         'PORT': DB_PORT, 
-        "OPTIONS": {"sslmode": "require"} 
+        "OPTIONS": {"sslmode": "disable"} 
     }
 }
 
@@ -259,9 +259,9 @@ CELERY_TIMEZONE="Asia/Kolkata"
 CELERY_BROKER_URL = f"redis://{REDIS_SERVER}:{REDIS_PORT}/0"
 CELERY_RESULT_BACKEND = "django-db"
 CELERY_CACHE_BACKEND = 'default'
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'pickle'
+CELERY_RESULT_SERIALIZER = 'pickle'
+CELERY_ACCEPT_CONTENT = ['application/x-python-serialize', 'json']
 
 CELERY_RESULT_EXTENDED = True
 

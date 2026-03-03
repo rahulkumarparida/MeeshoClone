@@ -26,7 +26,7 @@ const fetchFilteredData = async (selected) => {
       let response =await api.get(url)
 
 
-      setProducts([...response.data.results])
+      setProducts([...response.data])
 
   
 

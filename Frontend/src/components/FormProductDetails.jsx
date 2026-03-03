@@ -3,6 +3,7 @@ import { Plus, Tag, IndianRupee, FileText, Layers, Image } from 'lucide-react';
 import api from '../services/api';
 import loader from "../assets/loader.gif";
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 const FormProductDetails = ({ Authtokens }) => {
 
 const navigate = useNavigate()
@@ -24,7 +25,9 @@ const categoryDetails = async () => {
     const response = await api.get("/products/categories/");
   
     setCategory(response.data);
-  } catch (e) {}
+  } catch (e) {
+    return toast.error(e);
+  }
 }
 
 useEffect(() => {
@@ -82,11 +85,13 @@ const sendProductDetails = async (e) => {
     const response = await api.post("/products/", formData, {
       headers: { Authorization: `Bearer ${access}` }
     });
+    toast(`Product ${response.data.title} will soon be live on your store!`, { icon: "🚀" });
 
-    navigate(`/${response.data.slug}`)
+    navigate(`/`)
 
 
   } catch (error) {
+     
     toast.error(error);
   } finally {
     setLoading(false);

@@ -20,6 +20,12 @@ const fetchFilteredData = async (selected) => {
 
       setProducts([...response.data.results])
 
+  }else{
+    let url =`/products/`
+    let response =await api.get(url)
+
+
+      setProducts([...response.data.results])
   }
 
 

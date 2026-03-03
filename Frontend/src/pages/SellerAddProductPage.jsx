@@ -23,6 +23,7 @@ useEffect(() => {
     if ((response).status == 200) {
       
       setVerifiication(await verifyUser())
+      
     }
  
   }

@@ -4,7 +4,7 @@ import { User , Search , ShoppingCart  } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { verifyUser } from '../services/auth.api.js'
 import api from '../services/api.js'
-import { useState , useEffect  , useCallback} from 'react'
+import { useState , useEffect  , useMemo} from 'react'
 import { debounce } from 'lodash'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
@@ -108,22 +108,27 @@ const Headers = () => {
   // http://127.0.0.1:8000/products/?search=Camera search query
 
 
-const fetchSuggestion = useCallback(
-  debounce(async (searchValue) => {
+const fetchSuggestion = useMemo(
+  (searchValue)=>
+    debounce(async (searchValue) => {
+
     if (searchValue.length > 0){
       try {
         let response = await api.get(`/products/?search=${searchValue}`)
-        setSuggestions([...response.data.results])
+        
+        
+        setSuggestions([...response.data])
       
       } catch (error) {
+        console.log(error)
         toast.error("Error fetching suggestions")
       }
   
     }else{
       setSuggestions([])
     }
-  },300),
-  [],
+  },300)
+  , []
 )
 
 
