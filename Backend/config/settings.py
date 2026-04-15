@@ -16,7 +16,7 @@ from datetime import timedelta
 import os
 import cloudinary
 import environ
-import os
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent   
 # Initialize environ
@@ -62,7 +62,7 @@ SECRET_KEY = DJANGO_SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1','meeshoclone-api.onrender.com',"meesho-clone-pink.vercel.app"]
+ALLOWED_HOSTS = ['localhost', '127.0.0.1','0.0.0.0','10.22.212.235','meeshoclone-api.onrender.com',"meesho-clone-pink.vercel.app"]
 
 AUTH_USER_MODEL = 'users.User'
 
