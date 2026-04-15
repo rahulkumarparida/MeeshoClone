@@ -38,7 +38,7 @@ class ProductReadSerializer(serializers.ModelSerializer):
     # inventory = serializers.IntegerField(source="inventory.quantity" , read_only=True)
     # available = serializers.IntegerField(source="inventory.reserved" , read_only=True)
     # ,'inventory','available'
-    average_rating = serializers.SerializerMethodField()
+    average_rating = serializers.FloatField(read_only=True)
     review_count = serializers.SerializerMethodField()
     
     class Meta:
@@ -47,8 +47,11 @@ class ProductReadSerializer(serializers.ModelSerializer):
         read_only_fields = ['id','average_rating','review_count','created_at']
         
     
-    def get_average_rating(self,obj):
-        return obj.reviews.aggregate(avg=models.Avg('rating'))['avg']
+        
+    def get_queryset(self):
+        return Product.objects.annotate(
+            average_rating=models.Avg('reviews__rating')
+        )
     
     
     def get_review_count(self,obj):
